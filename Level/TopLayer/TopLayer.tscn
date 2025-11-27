@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://n6f26gc7p7le"]
+
+[ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_r0ksi"]
+[ext_resource type="Script" uid="uid://dy6inbrockvv6" path="res://Level/Common/Player.cs" id="2_87g2j"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l60kp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l60kp"]
+size = Vector3(4, 0.1, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_87g2j"]
+albedo_texture = ExtResource("1_r0ksi")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rrwnl"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l60kp"]
+
+[node name="Main" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
+physics_material_override = SubResource("PhysicsMaterial_l60kp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014770508, 0, 0)
+shape = SubResource("BoxShape3D_l60kp")
+
+[node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(2.0491152, 0, 0, 0, 1, 0, 0, 0, 2.0151305, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_87g2j")
+gi_lightmap_texel_scale = 2.7754
+mesh = SubResource("PlaneMesh_rrwnl")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0597339, 0)
+script = ExtResource("2_87g2j")
+_speed = 100.0
+_jumpForce = 10.0
+_acceleration = 5.0
+_braking = 5.0
+_airAcceleration = 5.0
+_camera = NodePath("Camera3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_l60kp")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.215426, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3654203, 0)
+light_energy = 3.44
+light_indirect_energy = 2.052
