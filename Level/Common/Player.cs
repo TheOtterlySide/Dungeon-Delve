@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using DungeonDelve.Level.Common;
 
 public partial class Player : CharacterBody3D
 {
@@ -12,6 +13,7 @@ public partial class Player : CharacterBody3D
 
     [Export] private bool _isRunning;
     [Export] private bool _isJumping;
+    [Export] private State _state;
 
     [ExportGroup("Camera")] [Export] private Camera3D _camera;
     [Export] private Vector2 _cameraInput;
@@ -38,7 +40,6 @@ public partial class Player : CharacterBody3D
 
         var moveInput = Input.GetVector("mv_left", "mv_right", "mv_for", "mv_back");
         var moveDirection = Transform.Basis * new Vector3(moveInput.X, 0, moveInput.Y);
-
         var currentSmooth = _acceleration;
 
         if (!IsOnFloor())
@@ -56,9 +57,33 @@ public partial class Player : CharacterBody3D
             (float) Mathf.Lerp(Velocity.X, moveDirection.X * currentSmooth, delta),
             Velocity.Y,
             (float) Mathf.Lerp(Velocity.Z, moveDirection.Z * currentSmooth, delta)
-            );
+        );
 
 
         MoveAndSlide();
+    }
+
+    private void HandleStateChange()
+    {
+        
+    }
+    
+    private State ChangeStateOfCharacter(State newState)
+    {
+        switch (newState)
+        {
+            case State.ATTACK:
+                break;
+            case State.RUN:
+                break;
+            case State.WALK:
+                break;
+            case State.JUMP:
+                break;
+            default:
+                break;
+        }
+        
+        return newState;
     }
 }
