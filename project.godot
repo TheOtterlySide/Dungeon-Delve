@@ -15,6 +15,10 @@ run/main_scene="uid://n6f26gc7p7le"
 config/features=PackedStringArray("4.5", "C#")
 config/icon="res://icon.svg"
 
+[autoload]
+
+WwiseRuntimeManager="*res://addons/Wwise/runtime/wwise_runtime_manager.gd"
+
 [dotnet]
 
 project/assembly_name="Dungeon Delve"
