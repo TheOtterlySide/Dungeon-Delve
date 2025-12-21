@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://17obrv3n8ikw"
+path="res://.godot/imported/table_2x3.obj-1e50074986099591151edea8960f32fc.mesh"
+
+[deps]
+
+files=["res://.godot/imported/table_2x3.obj-1e50074986099591151edea8960f32fc.mesh"]
+
+source_file="res://Texture : Model/VoxelDungeonSet/Obj/table_2x3.obj"
+dest_files=["res://.godot/imported/table_2x3.obj-1e50074986099591151edea8960f32fc.mesh", "res://.godot/imported/table_2x3.obj-1e50074986099591151edea8960f32fc.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

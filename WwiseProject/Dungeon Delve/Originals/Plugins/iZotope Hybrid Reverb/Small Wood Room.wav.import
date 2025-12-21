@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ynie6m77spg7"
+path="res://.godot/imported/Small Wood Room.wav-13c00b41f3894647ab05ca540d02a9aa.sample"
+
+[deps]
+
+source_file="res://WwiseProject/Dungeon Delve/Originals/Plugins/iZotope Hybrid Reverb/Small Wood Room.wav"
+dest_files=["res://.godot/imported/Small Wood Room.wav-13c00b41f3894647ab05ca540d02a9aa.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

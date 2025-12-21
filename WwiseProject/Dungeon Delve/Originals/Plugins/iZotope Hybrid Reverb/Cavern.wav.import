@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bwlwiwvcwj813"
+path="res://.godot/imported/Cavern.wav-bf474349a269783962c153d11dc1a94d.sample"
+
+[deps]
+
+source_file="res://WwiseProject/Dungeon Delve/Originals/Plugins/iZotope Hybrid Reverb/Cavern.wav"
+dest_files=["res://.godot/imported/Cavern.wav-bf474349a269783962c153d11dc1a94d.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
