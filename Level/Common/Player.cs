@@ -23,7 +23,7 @@ public partial class Player : CharacterBody3D
 
     public override void _Ready()
     {
-        base._Ready();
+        Input.SetMouseMode(Input.MouseModeEnum.Captured);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -60,7 +60,45 @@ public partial class Player : CharacterBody3D
         );
 
 
+        //Cameras
+        if (Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+        {
+            // Yaw (horizontal)
+            RotateY(-_cameraInput.X * _cameraSensivity);
+
+            // Pitch (vertikal)
+            _camera.RotateX(-_cameraInput.Y * _cameraSensivity);
+            
+            var rotation = _camera.Rotation;
+            rotation.X = Mathf.Clamp(rotation.X, -1.5f, 1.5f);
+            _camera.Rotation = rotation;
+            _cameraInput = Vector2.Zero;
+        }
+		
+        //Mouse
+        if (Input.IsActionJustPressed("ui_cancel"))
+        {
+            if (Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+            {
+                Input.SetMouseMode(Input.MouseModeEnum.Visible);
+            }
+            else
+            {
+                Input.SetMouseMode(Input.MouseModeEnum.Captured);
+            }
+        }
+        
         MoveAndSlide();
+    }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (@event is InputEventMouseMotion mouseMotion)
+        {
+            _cameraInput = mouseMotion.Relative;
+        }
+
+        base._UnhandledInput(@event);
     }
 
     private void HandleStateChange()
