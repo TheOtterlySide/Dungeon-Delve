@@ -34,14 +34,14 @@ mesh = SubResource("PlaneMesh_rrwnl")
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0597339, 0)
 script = ExtResource("2_87g2j")
-_speed = 100.0
-_jumpForce = 6.0
-_sprintSpeed = 150.0
-_acceleration = 5.0
-_braking = 5.0
+_speed = 8.0
+_jumpForce = 150.0
+_sprintSpeed = 30.0
+_braking = 30.0
 _airAcceleration = 5.0
 _camera = NodePath("Camera3D")
 _cameraSensivity = 0.001
+_gravityMultiplier = 3.5
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 shape = SubResource("CapsuleShape3D_l60kp")

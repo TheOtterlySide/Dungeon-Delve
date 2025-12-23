@@ -4,7 +4,8 @@ using DungeonDelve.Level.Common;
 
 public partial class Player : CharacterBody3D
 {
-    [ExportGroup("PlayerStats")] [Export] private float _speed;
+    [ExportGroup("PlayerStats")] 
+    [Export] private float _speed;
     [Export] private float _jumpForce;
     [Export] private float _sprintSpeed;
     [Export] private float _acceleration;
@@ -15,11 +16,13 @@ public partial class Player : CharacterBody3D
     [Export] private bool _isJumping;
     [Export] private State _state;
 
-    [ExportGroup("Camera")] [Export] private Camera3D _camera;
+    [ExportGroup("Camera")] 
+    [Export] private Camera3D _camera;
     [Export] private Vector2 _cameraInput;
     [Export] private float _cameraSensivity;
 
     [ExportGroup("World")] [Export] private Variant _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity");
+    [Export] private float _gravityMultiplier = 3f;
 
     public override void _Ready()
     {
@@ -28,10 +31,48 @@ public partial class Player : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
     {
-        if (!IsOnFloor())
+        HandleMovement(delta);
+        HandleCamera();
+        HandleMouse();
+
+        MoveAndSlide();
+    }
+
+    private static void HandleMouse()
+    {
+        if (Input.IsActionJustPressed("ui_cancel"))
         {
-            Velocity -= new Vector3(0, (float)(_gravity.AsSingle() * delta), 0);
+            if (Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+            {
+                Input.SetMouseMode(Input.MouseModeEnum.Visible);
+            }
+            else
+            {
+                Input.SetMouseMode(Input.MouseModeEnum.Captured);
+            }
         }
+    }
+
+    private void HandleCamera()
+    {
+        if (Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+        {
+            // Yaw (horizontal)
+            RotateY(-_cameraInput.X * _cameraSensivity);
+
+            // Pitch (vertikal)
+            _camera.RotateX(-_cameraInput.Y * _cameraSensivity);
+
+            var rotation = _camera.Rotation;
+            rotation.X = Mathf.Clamp(rotation.X, -1.5f, 1.5f);
+            _camera.Rotation = rotation;
+            _cameraInput = Vector2.Zero;
+        }
+    }
+
+    private void HandleMovement(double delta)
+    {
+        float gravity = _gravity.AsSingle() * _gravityMultiplier;
 
         if (Input.IsActionPressed("jump") && IsOnFloor())
         {
@@ -51,44 +92,33 @@ public partial class Player : CharacterBody3D
         {
             currentSmooth = _braking;
         }
-
-        Velocity = new Vector3
-        (
-            (float) Mathf.Lerp(Velocity.X, moveDirection.X * currentSmooth, delta),
-            Velocity.Y,
-            (float) Mathf.Lerp(Velocity.Z, moveDirection.Z * currentSmooth, delta)
-        );
-
-
-        //Cameras
-        if (Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+        
+        if (!IsOnFloor())
         {
-            // Yaw (horizontal)
-            RotateY(-_cameraInput.X * _cameraSensivity);
-
-            // Pitch (vertikal)
-            _camera.RotateX(-_cameraInput.Y * _cameraSensivity);
-            
-            var rotation = _camera.Rotation;
-            rotation.X = Mathf.Clamp(rotation.X, -1.5f, 1.5f);
-            _camera.Rotation = rotation;
-            _cameraInput = Vector2.Zero;
+            Velocity = new Vector3(
+                Mathf.Lerp(Velocity.X, moveDirection.X * _speed, _airAcceleration * (float)delta),
+                -(float)(gravity * delta),
+                Mathf.Lerp(Velocity.Z, moveDirection.Z * _speed, _airAcceleration * (float)delta)
+            );
         }
-		
-        //Mouse
-        if (Input.IsActionJustPressed("ui_cancel"))
+
+        if (IsOnFloor())
         {
-            if (Input.GetMouseMode() == Input.MouseModeEnum.Captured)
-            {
-                Input.SetMouseMode(Input.MouseModeEnum.Visible);
-            }
-            else
-            {
-                Input.SetMouseMode(Input.MouseModeEnum.Captured);
-            }
+            Velocity = new Vector3(
+                moveDirection.X * _speed,
+                Velocity.Y,
+                moveDirection.Z * _speed
+            );
         }
         
-        MoveAndSlide();
+        if (moveInput == Vector2.Zero && IsOnFloor())
+        {
+            Velocity = new Vector3(
+                Mathf.MoveToward(Velocity.X, 0, _braking * (float)delta),
+                Velocity.Y,
+                Mathf.MoveToward(Velocity.Z, 0, _braking * (float)delta)
+            );
+        }
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -103,9 +133,8 @@ public partial class Player : CharacterBody3D
 
     private void HandleStateChange()
     {
-        
     }
-    
+
     private State ChangeStateOfCharacter(State newState)
     {
         switch (newState)
@@ -121,7 +150,7 @@ public partial class Player : CharacterBody3D
             default:
                 break;
         }
-        
+
         return newState;
     }
 }
