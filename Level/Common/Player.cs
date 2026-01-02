@@ -96,9 +96,9 @@ public partial class Player : CharacterBody3D
         if (!IsOnFloor())
         {
             Velocity = new Vector3(
-                Mathf.Lerp(Velocity.X, moveDirection.X * _speed, _airAcceleration * (float)delta),
+                Mathf.Lerp(Velocity.X, moveDirection.X * _speed, currentSmooth * (float)delta),
                 -(float)(gravity * delta),
-                Mathf.Lerp(Velocity.Z, moveDirection.Z * _speed, _airAcceleration * (float)delta)
+                Mathf.Lerp(Velocity.Z, moveDirection.Z * _speed, currentSmooth * (float)delta)
             );
         }
 
@@ -114,9 +114,9 @@ public partial class Player : CharacterBody3D
         if (moveInput == Vector2.Zero && IsOnFloor())
         {
             Velocity = new Vector3(
-                Mathf.MoveToward(Velocity.X, 0, _braking * (float)delta),
+                Mathf.MoveToward(Velocity.X, 0, currentSmooth * (float)delta),
                 Velocity.Y,
-                Mathf.MoveToward(Velocity.Z, 0, _braking * (float)delta)
+                Mathf.MoveToward(Velocity.Z, 0, currentSmooth * (float)delta)
             );
         }
     }
