@@ -60,7 +60,7 @@ public partial class Player : CharacterBody3D
             // Yaw (horizontal)
             RotateY(-_cameraInput.X * _cameraSensivity);
 
-            // Pitch (vertikal)
+            // Pitch (vertical)
             _camera.RotateX(-_cameraInput.Y * _cameraSensivity);
 
             var rotation = _camera.Rotation;
@@ -73,6 +73,7 @@ public partial class Player : CharacterBody3D
     private void HandleMovement(double delta)
     {
         float gravity = _gravity.AsSingle() * _gravityMultiplier;
+        float speed = Input.IsActionPressed("sprint") ? _sprintSpeed : _speed;
 
         if (Input.IsActionPressed("jump") && IsOnFloor())
         {
@@ -82,7 +83,7 @@ public partial class Player : CharacterBody3D
         var moveInput = Input.GetVector("mv_left", "mv_right", "mv_for", "mv_back");
         var moveDirection = Transform.Basis * new Vector3(moveInput.X, 0, moveInput.Y);
         var currentSmooth = _acceleration;
-
+        
         if (!IsOnFloor())
         {
             currentSmooth = _airAcceleration;
@@ -96,18 +97,18 @@ public partial class Player : CharacterBody3D
         if (!IsOnFloor())
         {
             Velocity = new Vector3(
-                Mathf.Lerp(Velocity.X, moveDirection.X * _speed, currentSmooth * (float)delta),
+                Mathf.Lerp(Velocity.X, moveDirection.X * speed, currentSmooth * (float)delta),
                 -(float)(gravity * delta),
-                Mathf.Lerp(Velocity.Z, moveDirection.Z * _speed, currentSmooth * (float)delta)
+                Mathf.Lerp(Velocity.Z, moveDirection.Z * speed, currentSmooth * (float)delta)
             );
         }
 
         if (IsOnFloor())
         {
             Velocity = new Vector3(
-                moveDirection.X * _speed,
+                moveDirection.X * speed,
                 Velocity.Y,
-                moveDirection.Z * _speed
+                moveDirection.Z * speed
             );
         }
         
