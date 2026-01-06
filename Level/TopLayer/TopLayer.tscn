@@ -39,6 +39,7 @@ _jumpForce = 15.0
 _sprintSpeed = 12.0
 _braking = 30.0
 _airAcceleration = 5.0
+_jumpCountBase = 1
 _camera = NodePath("Camera3D")
 _cameraSensivity = 0.001
 _gravityMultiplier = 3.5

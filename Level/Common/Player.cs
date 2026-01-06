@@ -11,6 +11,10 @@ public partial class Player : CharacterBody3D
     [Export] private float _acceleration;
     [Export] private float _braking;
     [Export] private float _airAcceleration;
+    [Export] private int _jumpCountBase;
+
+    private int _jumpCount;
+    [Export] private bool _doubleJump;
 
     [Export] private bool _isRunning;
     [Export] private bool _isJumping;
@@ -21,11 +25,13 @@ public partial class Player : CharacterBody3D
     [Export] private Vector2 _cameraInput;
     [Export] private float _cameraSensivity;
 
-    [ExportGroup("World")] [Export] private Variant _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity");
+    [ExportGroup("World")] 
+    [Export] private Variant _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity");
     [Export] private float _gravityMultiplier = 3f;
 
     public override void _Ready()
     {
+        _jumpCount = _jumpCountBase;
         Input.SetMouseMode(Input.MouseModeEnum.Captured);
     }
 
@@ -75,13 +81,15 @@ public partial class Player : CharacterBody3D
         float gravity = _gravity.AsSingle() * _gravityMultiplier;
         float speed = Input.IsActionPressed("sprint") ? _sprintSpeed : _speed;
 
-        if (Input.IsActionPressed("jump") && IsOnFloor())
+        if (Input.IsActionJustPressed("jump") && _jumpCount >= 0)
         {
             Velocity = new Vector3(
                 Velocity.X,
                 _jumpForce,
                 Velocity.Z
             );
+
+            _jumpCount--;
         }
 
         var moveInput = Input.GetVector("mv_left", "mv_right", "mv_for", "mv_back");
@@ -106,7 +114,6 @@ public partial class Player : CharacterBody3D
                 Velocity.Z
             );
             
-            
             AirMove(moveDirection.Normalized(), _speed, (float)delta);
         }
 
@@ -117,6 +124,8 @@ public partial class Player : CharacterBody3D
                 Velocity.Y,
                 moveDirection.Z * speed
             );
+
+            _jumpCount = _jumpCountBase;
         }
         
         if (moveInput == Vector2.Zero && IsOnFloor())
