@@ -77,7 +77,11 @@ public partial class Player : CharacterBody3D
 
         if (Input.IsActionPressed("jump") && IsOnFloor())
         {
-            Velocity = new Vector3(0, _jumpForce, 0);
+            Velocity = new Vector3(
+                Velocity.X,
+                _jumpForce,
+                Velocity.Z
+            );
         }
 
         var moveInput = Input.GetVector("mv_left", "mv_right", "mv_for", "mv_back");
@@ -97,10 +101,13 @@ public partial class Player : CharacterBody3D
         if (!IsOnFloor())
         {
             Velocity = new Vector3(
-                Mathf.Lerp(Velocity.X, moveDirection.X * speed, currentSmooth * (float)delta),
-                -(float)(gravity * delta),
-                Mathf.Lerp(Velocity.Z, moveDirection.Z * speed, currentSmooth * (float)delta)
+                Velocity.X,
+                Velocity.Y - gravity * (float)delta,
+                Velocity.Z
             );
+            
+            
+            AirMove(moveDirection.Normalized(), _speed, (float)delta);
         }
 
         if (IsOnFloor())
@@ -130,6 +137,33 @@ public partial class Player : CharacterBody3D
         }
 
         base._UnhandledInput(@event);
+    }
+    
+    private void AirMove(Vector3 wishDir, float speed, float delta)
+    {
+        if (wishDir == Vector3.Zero)
+        {
+            return;
+        }
+
+        float wishSpeed = wishDir.Length();
+        wishSpeed = Mathf.Min(wishSpeed, 1.0f) * speed;
+
+        float currentSpeed = Velocity.Dot(wishDir);
+        float addSpeed = wishSpeed - currentSpeed;
+
+        if (addSpeed <= 0)
+        {
+            return;
+        }
+
+        float accelSpeed = _airAcceleration * wishSpeed * delta;
+        if (accelSpeed > addSpeed)
+        {
+            accelSpeed = addSpeed;
+        }
+
+        Velocity += accelSpeed * wishDir;
     }
 
     private void HandleStateChange()
