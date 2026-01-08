@@ -1,6 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://n6f26gc7p7le"]
+[gd_scene load_steps=17 format=3 uid="uid://n6f26gc7p7le"]
 
+[ext_resource type="Script" uid="uid://dhkoxo1f31e2u" path="res://Level/TopLayer/GameManager.cs" id="1_hun5q"]
 [ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_r0ksi"]
+[ext_resource type="Script" uid="uid://ciaqikprrn335" path="res://Level/TopLayer/LevelBuilder.cs" id="2_8q7dr"]
 [ext_resource type="Script" uid="uid://dy6inbrockvv6" path="res://Level/Common/Player.cs" id="2_87g2j"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l60kp"]
@@ -15,7 +17,37 @@ albedo_texture = ExtResource("1_r0ksi")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l60kp"]
 
+[sub_resource type="Gradient" id="Gradient_87g2j"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rrwnl"]
+gradient = SubResource("Gradient_87g2j")
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_87g2j"]
+panorama = SubResource("GradientTexture2D_rrwnl")
+
+[sub_resource type="Sky" id="Sky_rrwnl"]
+sky_material = SubResource("PanoramaSkyMaterial_87g2j")
+
+[sub_resource type="Environment" id="Environment_hun5q"]
+background_mode = 2
+background_energy_multiplier = 0.21
+sky = SubResource("Sky_rrwnl")
+ambient_light_color = Color(1, 0, 0, 1)
+ambient_light_energy = 1.43
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_8q7dr"]
+
+[sub_resource type="Compositor" id="Compositor_fm0he"]
+
 [node name="Main" type="Node3D"]
+
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("_player", "_levelBuilder")]
+script = ExtResource("1_hun5q")
+_player = NodePath("../CharacterBody3D")
+_levelBuilder = NodePath("LevelBuilder")
+
+[node name="LevelBuilder" type="Node" parent="GameManager"]
+script = ExtResource("2_8q7dr")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
@@ -54,7 +86,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.215426, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3654203, 0)
 light_energy = 3.44
 light_indirect_energy = 2.052
+omni_range = 33.908
+omni_attenuation = -0.096
 
 [node name="AkBank" type="AkBank" parent="."]
 
 [node name="AkListener3D" type="AkListener3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hun5q")
+camera_attributes = SubResource("CameraAttributesPractical_8q7dr")
+compositor = SubResource("Compositor_fm0he")
