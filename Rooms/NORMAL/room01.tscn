@@ -17,7 +17,7 @@ albedo_texture = ExtResource("1_782l8")
 [node name="START" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9164618, 0.15349573, 0)
 
-[node name="END" type="Node3D" parent="."]
+[node name="END" type="Node3D" parent="." groups=["Exit"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05220294, 0.30699146, -1.997714)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]

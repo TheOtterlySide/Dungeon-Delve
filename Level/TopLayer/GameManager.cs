@@ -13,7 +13,7 @@ public partial class GameManager : Node
     public override void _Ready()
     {
         _levelBuilder.Level = 2;
-        _levelBuilder.BuildInitial();   
+        _levelBuilder.Initial();   
     }
 
     public override void _Process(double delta)

@@ -23,6 +23,10 @@ WwiseRuntimeManager="*res://addons/Wwise/runtime/wwise_runtime_manager.gd"
 
 project/assembly_name="Dungeon Delve"
 
+[global_group]
+
+Exit="Group for Exit nodes"
+
 [input]
 
 mv_left={
