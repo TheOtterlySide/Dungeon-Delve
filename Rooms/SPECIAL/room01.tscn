@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://cnaq3g5peb5ox"]
+
+[ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_v02oj"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_782l8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_014kx"]
+size = Vector3(4, 0.1, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1bfu"]
+albedo_color = Color(1.6446645, 1.3305459, 0, 1)
+albedo_texture = ExtResource("1_v02oj")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
+
+[node name="Room01" type="Node3D" unique_id=1693560293]
+
+[node name="ENTRY" type="Marker3D" parent="." unique_id=679219403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9164618, -1.18857, 20.316814)
+
+[node name="EXIT" type="Marker3D" parent="." unique_id=788220821 groups=["Exit"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05220294, 0.30699146, 74.345314)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=57742049]
+transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 49.609985)
+physics_material_override = SubResource("PhysicsMaterial_782l8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1732859921]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014770508, 0, 0)
+shape = SubResource("BoxShape3D_014kx")
+
+[node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D" unique_id=1551065809]
+transform = Transform3D(2.0491152, 0, 0, 0, 1, 0, 0, 0, 2.0151305, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_e1bfu")
+gi_lightmap_texel_scale = 2.7754
+mesh = SubResource("PlaneMesh_08uu4")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=399241416]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.320187, 50)
+omni_range = 27.459
+omni_attenuation = -0.432

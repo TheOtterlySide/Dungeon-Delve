@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bsbmr37ejinrd"]
+[gd_scene format=3 uid="uid://bsbmr37ejinrd"]
 
 [ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_ao7at"]
 [ext_resource type="PackedScene" uid="uid://c70siaykoskup" path="res://Texture : Model/PSX_Dungeon/Models/Box.fbx" id="2_p2ql0"]
@@ -14,32 +14,32 @@ albedo_texture = ExtResource("1_ao7at")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
-[node name="Room03" type="Node3D"]
+[node name="Room03" type="Node3D" unique_id=1679654908]
 
-[node name="START" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9164618, 0.15349573, 0)
+[node name="ENTRY" type="Marker3D" parent="." unique_id=326446463]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.956009, 0.15349573, 0)
 
-[node name="END" type="Node3D" parent="." groups=["Exit"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05220294, 0.30699146, -1.997714)
+[node name="EXIT" type="Marker3D" parent="." unique_id=179086182 groups=["Exit"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.741043, 0.30699146, 35.427814)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=359915695]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, -47.171406, 0, 110.839)
 physics_material_override = SubResource("PhysicsMaterial_782l8")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1852356284]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -0.014770507, 0, -6.601107)
 shape = SubResource("BoxShape3D_014kx")
 
-[node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D" unique_id=1229939341]
 transform = Transform3D(2.0491152, 0, 0, 0, 0.9999999, 0, 0, 0, 2.01513, 0, 0, -6.6113405)
 material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1620077637]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.338978, 4.4212646, 4.806843)
 omni_range = 9.251
 omni_attenuation = -1.192
 
-[node name="Box" parent="." instance=ExtResource("2_p2ql0")]
+[node name="Box" parent="." unique_id=812274701 instance=ExtResource("2_p2ql0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -74.290184, 0.7499992, 21.74561)

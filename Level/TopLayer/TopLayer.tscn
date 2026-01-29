@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://n6f26gc7p7le"]
+[gd_scene format=3 uid="uid://n6f26gc7p7le"]
 
 [ext_resource type="Script" uid="uid://dhkoxo1f31e2u" path="res://Level/TopLayer/GameManager.cs" id="1_hun5q"]
 [ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_r0ksi"]
 [ext_resource type="Script" uid="uid://ciaqikprrn335" path="res://Level/TopLayer/LevelBuilder.cs" id="2_8q7dr"]
 [ext_resource type="Script" uid="uid://dy6inbrockvv6" path="res://Level/Common/Player.cs" id="2_87g2j"]
+[ext_resource type="PackedScene" uid="uid://cdfcr6mxtg350" path="res://Rooms/NORMAL/room01.tscn" id="5_8q7dr"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l60kp"]
 
@@ -39,31 +40,37 @@ ambient_light_energy = 1.43
 
 [sub_resource type="Compositor" id="Compositor_fm0he"]
 
-[node name="Main" type="Node3D"]
+[node name="Main" type="Node3D" unique_id=617513794]
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("_player", "_levelBuilder")]
+[node name="GameManager" type="Node" parent="." unique_id=472932947 node_paths=PackedStringArray("_player", "_levelBuilder")]
 script = ExtResource("1_hun5q")
 _player = NodePath("../CharacterBody3D")
 _levelBuilder = NodePath("LevelBuilder")
 
-[node name="LevelBuilder" type="Node" parent="GameManager"]
+[node name="LevelBuilder" type="Node" parent="GameManager" unique_id=735112104]
 script = ExtResource("2_8q7dr")
+_startRoom = ExtResource("5_8q7dr")
+_exitRoom = ExtResource("5_8q7dr")
+_roomPath = "res://Rooms/NORMAL/"
+_specialRoomPath = "res://Rooms/SPECIAL/"
+_bossRoomPath = "res://Rooms/BOSS/"
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2113898279]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
+visible = false
 physics_material_override = SubResource("PhysicsMaterial_l60kp")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1033551396]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014770508, 0, 0)
 shape = SubResource("BoxShape3D_l60kp")
 
-[node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D" unique_id=121503102]
 transform = Transform3D(2.0491152, 0, 0, 0, 1, 0, 0, 0, 2.0151305, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_87g2j")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_rrwnl")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_camera")]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=283241400 node_paths=PackedStringArray("_camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0597339, 0)
 script = ExtResource("2_87g2j")
 _speed = 8.0
@@ -76,24 +83,26 @@ _camera = NodePath("Camera3D")
 _cameraSensivity = 0.001
 _gravityMultiplier = 3.5
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1210590301]
 shape = SubResource("CapsuleShape3D_l60kp")
 
-[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D" unique_id=305731390]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.215426, 0)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=762242256]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3654203, 0)
 light_energy = 3.44
 light_indirect_energy = 2.052
 omni_range = 33.908
 omni_attenuation = -0.096
 
-[node name="AkBank" type="AkBank" parent="."]
+[node name="AkBank" type="AkBank" parent="." unique_id=1140723936]
 
-[node name="AkListener3D" type="AkListener3D" parent="."]
+[node name="AkListener3D" type="AkListener3D" parent="." unique_id=529153200]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=33450831]
 environment = SubResource("Environment_hun5q")
 camera_attributes = SubResource("CameraAttributesPractical_8q7dr")
 compositor = SubResource("Compositor_fm0he")
+
+[node name="Room01" parent="." unique_id=583662802 instance=ExtResource("5_8q7dr")]
