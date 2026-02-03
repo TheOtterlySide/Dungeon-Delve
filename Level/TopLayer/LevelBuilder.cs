@@ -132,6 +132,7 @@ public partial class LevelBuilder : Node
         AddChild(instance);
 
         var endRoom = (Node3D)_exitRoom.Instantiate();
+        _exit = endRoom;
         AddChild(endRoom);
         _placedRooms.Add(endRoom);
     }
