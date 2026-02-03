@@ -106,3 +106,8 @@ camera_attributes = SubResource("CameraAttributesPractical_8q7dr")
 compositor = SubResource("Compositor_fm0he")
 
 [node name="Room01" parent="." unique_id=583662802 instance=ExtResource("5_8q7dr")]
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=307937649]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 128.17575, 0)
+omni_range = 470.796
+omni_attenuation = -0.008

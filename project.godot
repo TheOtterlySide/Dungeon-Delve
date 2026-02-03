@@ -29,7 +29,7 @@ project/assembly_name="Dungeon Delve"
 
 [global_group]
 
-Exit="Group for Exit nodes"
+SOCKET="Group for Exit nodes"
 
 [input]
 

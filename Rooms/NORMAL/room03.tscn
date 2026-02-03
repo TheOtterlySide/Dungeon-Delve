@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bsbmr37ejinrd"]
 
 [ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_ao7at"]
+[ext_resource type="Script" uid="uid://cjh5na3fmkfe0" path="res://Rooms/SPECIAL/SOCKET.cs" id="1_wx36v"]
 [ext_resource type="PackedScene" uid="uid://c70siaykoskup" path="res://Texture : Model/PSX_Dungeon/Models/Box.fbx" id="2_p2ql0"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_782l8"]
@@ -16,11 +17,13 @@ albedo_texture = ExtResource("1_ao7at")
 
 [node name="Room03" type="Node3D" unique_id=1679654908]
 
-[node name="ENTRY" type="Marker3D" parent="." unique_id=326446463]
+[node name="ENTRY" type="Marker3D" parent="." unique_id=326446463 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.956009, 0.15349573, 0)
+script = ExtResource("1_wx36v")
 
-[node name="EXIT" type="Marker3D" parent="." unique_id=179086182 groups=["Exit"]]
+[node name="EXIT" type="Marker3D" parent="." unique_id=179086182 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.741043, 0.30699146, 35.427814)
+script = ExtResource("1_wx36v")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=359915695]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, -47.171406, 0, 110.839)

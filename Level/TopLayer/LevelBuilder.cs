@@ -14,16 +14,13 @@ public partial class LevelBuilder : Node
     private bool _isFirstRun = true;
     private List<Node3D> _placedRooms = new();
 
-    [Export]
-    private PackedScene _startRoom;
-    [Export]
-    private PackedScene _exitRoom;
-    
+    [Export] private PackedScene _startRoom;
+    [Export] private PackedScene _exitRoom;
+
     private Node3D _start;
     private Node3D _exit;
 
-    [ExportGroup("Paths")] 
-    [Export] private string _roomPath;
+    [ExportGroup("Paths")] [Export] private string _roomPath;
     [Export] private string _specialRoomPath;
     [Export] private string _bossRoomPath;
 
@@ -85,24 +82,35 @@ public partial class LevelBuilder : Node
 
     private void AlignRooms()
     {
-        var currentExitPosition = new Vector3();
+        var currentSocketPosition = new Vector3();
         if (_isFirstRun)
         {
             _isFirstRun = false;
-            var startExitPosition = _start.GetNode<Marker3D>("EXIT");
-            currentExitPosition = startExitPosition.GlobalPosition;
+            var startSocketPosition = _start.GetNode<SOCKET>("EXIT");
+            startSocketPosition.Use();
+            currentSocketPosition = startSocketPosition.GlobalPosition;
         }
 
-        var nextRoom = _placedRooms[_random.Next(0, _placedRooms.Count)];
-        _placedRooms.Remove(nextRoom);
 
-        for (int i = 0; i < _placedRooms.Count; i++)
+        while (_placedRooms.Count > 0)
         {
-            nextRoom.Position = currentExitPosition;
-            nextRoom = _placedRooms[_random.Next(0, _placedRooms.Count)];
-            currentExitPosition = nextRoom.GetNode<Marker3D>("EXIT").GlobalPosition;
-            _placedRooms.Remove(nextRoom);
+            int index = _random.Next(_placedRooms.Count);
+            var room = _placedRooms[index];
+            _placedRooms.RemoveAt(index);
+            room.GlobalPosition = currentSocketPosition;
+            GD.Print(room.Name);
+            var exitSocketPosition = room.GetNode<SOCKET>("EXIT");
+            exitSocketPosition.Use();
+            
+            currentSocketPosition = exitSocketPosition.GlobalPosition;
         }
+        
+        var finalexitSocketPosition = _exit.GetNode<SOCKET>("EXIT");
+        finalexitSocketPosition.Use();
+        currentSocketPosition = finalexitSocketPosition.GlobalPosition;
+
+
+        
     }
 
     private void GenerateRooms()
