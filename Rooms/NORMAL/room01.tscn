@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cdfcr6mxtg350"]
 
-[ext_resource type="Script" uid="uid://cjh5na3fmkfe0" path="res://Rooms/SPECIAL/SOCKET.cs" id="1_014kx"]
+[ext_resource type="Script" path="res://Rooms/SPECIAL/RoomSocket.cs" id="1_014kx"]
 [ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_782l8"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_782l8"]
@@ -16,15 +16,14 @@ albedo_texture = ExtResource("1_782l8")
 [node name="Room01" type="Node3D" unique_id=1984975237]
 
 [node name="ENTRY" type="Marker3D" parent="." unique_id=493401489 groups=["SOCKET"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9164618, 0.15349573, 23.237381)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.9944046)
 script = ExtResource("1_014kx")
 
 [node name="EXIT" type="Marker3D" parent="." unique_id=623194697 groups=["SOCKET"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05220294, 0.30699146, 74.64283)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0223842, 0, 0)
 script = ExtResource("1_014kx")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1214831098]
-transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 49.609985)
 physics_material_override = SubResource("PhysicsMaterial_782l8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=115749531]

@@ -12,7 +12,7 @@ public partial class LevelBuilder : Node
 
     private Random _random = new();
     private bool _isFirstRun = true;
-    private List<Node3D> _placedRooms = new();
+    private List<Node3D> _roomPool = new();
 
     [Export] private PackedScene _startRoom;
     [Export] private PackedScene _exitRoom;
@@ -83,40 +83,71 @@ public partial class LevelBuilder : Node
     private void AlignRooms()
     {
         var currentSocketPosition = new Vector3();
+        int lastIndex = 0;
         if (_isFirstRun)
         {
             _isFirstRun = false;
-            var startSocketPosition = _start.GetNode<SOCKET>("EXIT");
-            startSocketPosition.Use();
-            currentSocketPosition = startSocketPosition.GlobalPosition;
+            var socketNodes = GetAllSockets(_start);
+            if (socketNodes.Count > 0)
+            {
+                var startSocketPosition = socketNodes[0].Position;
+                socketNodes[0].Use();
+                currentSocketPosition = startSocketPosition;
+            }
         }
 
-
-        while (_placedRooms.Count > 0)
+        while (_roomPool.Count > 0)
         {
-            int index = _random.Next(_placedRooms.Count);
-            var room = _placedRooms[index];
-            _placedRooms.RemoveAt(index);
-            room.GlobalPosition = currentSocketPosition;
-            GD.Print(room.Name);
-            var exitSocketPosition = room.GetNode<SOCKET>("EXIT");
-            exitSocketPosition.Use();
-            
-            currentSocketPosition = exitSocketPosition.GlobalPosition;
+            int index = _random.Next(_roomPool.Count);
+            if (index != lastIndex)
+            {
+                var room = _roomPool[index];
+                var availableSockets = GetAllSockets(room);
+                var freeSocket = GetAvailableSocket(availableSockets);
+                if (freeSocket != null)
+                {
+                    freeSocket.Use();
+                    GD.Print($"Aligning room {index} Pool is size:{_roomPool.Count}");
+                    room.GlobalPosition += currentSocketPosition - freeSocket.Position;
+                    currentSocketPosition = freeSocket.Position;
+                    lastIndex = index;
+                }
+                else
+                {
+                    _roomPool.RemoveAt(index);
+                    GD.Print($"Remove room {index} Pool is size:{_roomPool.Count}");
+                }
+            }
         }
-        
-        var finalexitSocketPosition = _exit.GetNode<SOCKET>("EXIT");
-        finalexitSocketPosition.Use();
-        currentSocketPosition = finalexitSocketPosition.GlobalPosition;
+    }
 
+    private RoomSocket GetAvailableSocket(List<RoomSocket> availableSockets)
+    {
+        var result = availableSockets.FirstOrDefault(x => !x.isUsed);
+        return result;
+    }
 
-        
+    private List<RoomSocket> GetAllSockets(Node3D start)
+    {
+        var sockets = new List<RoomSocket>();
+
+        var children = start.GetChildren();
+        foreach (var child in children)
+        {
+            if (child is RoomSocket socket)
+            {
+                sockets.Add(socket);
+            }
+        }
+
+        return sockets;
     }
 
     private void GenerateRooms()
     {
         var specialRoomCount = Level / 2;
         var bossRoomCount = 1;
+        int idRun;
 
         PrepareDefaultRooms();
 
@@ -134,7 +165,7 @@ public partial class LevelBuilder : Node
         var endRoom = (Node3D)_exitRoom.Instantiate();
         _exit = endRoom;
         AddChild(endRoom);
-        _placedRooms.Add(endRoom);
+        _roomPool.Add(endRoom);
     }
 
     private void InstantiateRoomAndPlace(List<PackedScene> scenesToInstantiate, int maxCount)
@@ -144,7 +175,7 @@ public partial class LevelBuilder : Node
             var sceneToInstantiate = scenesToInstantiate[_random.Next(0, scenesToInstantiate.Count)];
             var instance = (Node3D)sceneToInstantiate.Instantiate();
             AddChild(instance);
-            _placedRooms.Add(instance);
+            _roomPool.Add(instance);
         }
     }
 }

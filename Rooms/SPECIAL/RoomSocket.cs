@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class SOCKET : Marker3D
+public partial class RoomSocket : Marker3D
 {
     public bool isUsed;
     public void Use()

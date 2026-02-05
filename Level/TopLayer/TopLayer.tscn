@@ -18,28 +18,6 @@ albedo_texture = ExtResource("1_r0ksi")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l60kp"]
 
-[sub_resource type="Gradient" id="Gradient_87g2j"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_rrwnl"]
-gradient = SubResource("Gradient_87g2j")
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_87g2j"]
-panorama = SubResource("GradientTexture2D_rrwnl")
-
-[sub_resource type="Sky" id="Sky_rrwnl"]
-sky_material = SubResource("PanoramaSkyMaterial_87g2j")
-
-[sub_resource type="Environment" id="Environment_hun5q"]
-background_mode = 2
-background_energy_multiplier = 0.21
-sky = SubResource("Sky_rrwnl")
-ambient_light_color = Color(1, 0, 0, 1)
-ambient_light_energy = 1.43
-
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_8q7dr"]
-
-[sub_resource type="Compositor" id="Compositor_fm0he"]
-
 [node name="Main" type="Node3D" unique_id=617513794]
 
 [node name="GameManager" type="Node" parent="." unique_id=472932947 node_paths=PackedStringArray("_player", "_levelBuilder")]
@@ -99,11 +77,6 @@ omni_attenuation = -0.096
 [node name="AkBank" type="AkBank" parent="." unique_id=1140723936]
 
 [node name="AkListener3D" type="AkListener3D" parent="." unique_id=529153200]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=33450831]
-environment = SubResource("Environment_hun5q")
-camera_attributes = SubResource("CameraAttributesPractical_8q7dr")
-compositor = SubResource("Compositor_fm0he")
 
 [node name="Room01" parent="." unique_id=583662802 instance=ExtResource("5_8q7dr")]
 
