@@ -15,7 +15,6 @@ albedo_texture = ExtResource("1_ao7at")
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
 [node name="Room03" type="Node3D" unique_id=1679654908]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="ENTRY" type="Marker3D" parent="." unique_id=326446463 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)

@@ -40,10 +40,12 @@ physics_material_override = SubResource("PhysicsMaterial_l60kp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1033551396]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014770508, 0, 0)
+visible = false
 shape = SubResource("BoxShape3D_l60kp")
 
 [node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D" unique_id=121503102]
 transform = Transform3D(2.0491152, 0, 0, 0, 1, 0, 0, 0, 2.0151305, 0, 0, 0)
+visible = false
 material_override = SubResource("StandardMaterial3D_87g2j")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_rrwnl")
