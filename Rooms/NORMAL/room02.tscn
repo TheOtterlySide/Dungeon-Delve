@@ -15,19 +15,19 @@ albedo_texture = ExtResource("1_0uwqq")
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
 [node name="Room02" type="Node3D" unique_id=1954652902]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="ENTRY" type="Marker3D" parent="." unique_id=1609050605 groups=["SOCKET"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.97398937)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 gizmo_extents = 7.25
 script = ExtResource("1_vrssw")
 
 [node name="EXIT" type="Marker3D" parent="." unique_id=255610628 groups=["SOCKET"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0015203)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 gizmo_extents = 5.25
 script = ExtResource("1_vrssw")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1115786968]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 physics_material_override = SubResource("PhysicsMaterial_782l8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=708874861]

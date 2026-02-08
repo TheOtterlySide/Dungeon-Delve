@@ -17,11 +17,11 @@ albedo_texture = ExtResource("1_v02oj")
 [node name="Room01" type="Node3D" unique_id=1693560293]
 
 [node name="ENTRY" type="Marker3D" parent="." unique_id=679219403 groups=["SOCKET"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0412128, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 script = ExtResource("1_0aiby")
 
 [node name="EXIT" type="Marker3D" parent="." unique_id=788220821 groups=["SOCKET"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0222778, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
 script = ExtResource("1_0aiby")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=57742049]
