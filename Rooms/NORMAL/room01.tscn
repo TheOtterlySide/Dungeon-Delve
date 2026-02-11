@@ -14,6 +14,8 @@ albedo_texture = ExtResource("1_782l8")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_e1bfu"]
+
 [node name="Room01" type="Node3D" unique_id=1984975237]
 script = ExtResource("1_e1bfu")
 
@@ -37,3 +39,6 @@ transform = Transform3D(2.0491152, 0, 0, 0, 1, 0, 0, 0, 2.0151305, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=841208009]
+mesh = SubResource("PlaneMesh_e1bfu")

@@ -13,14 +13,16 @@ public partial class LevelBuilder : Node
     private Random _random = new();
     private bool _isFirstRun = true;
     private List<Node3D> _roomPool = new();
-
+    private Dictionary<(int x, int y), Room> grid = new();
+    
     [Export] private PackedScene _startRoom;
     [Export] private PackedScene _exitRoom;
 
     private Node3D _start;
     private Node3D _exit;
 
-    [ExportGroup("Paths")] [Export] private string _roomPath;
+    [ExportGroup("Paths")] 
+    [Export] private string _roomPath;
     [Export] private string _specialRoomPath;
     [Export] private string _bossRoomPath;
 
@@ -42,7 +44,7 @@ public partial class LevelBuilder : Node
         GetRoomScene(normalRoamLoader, _roomPath, RoomType.normal);
         GetRoomScene(speciaLoader, _specialRoomPath, RoomType.special);
         GetRoomScene(bossLoader, _bossRoomPath, RoomType.boss);
-
+        
         GenerateRooms();
         AlignRooms();
     }
@@ -82,6 +84,7 @@ public partial class LevelBuilder : Node
 
     private void AlignRooms()
     {
+        
         var currentSocketPosition = new Vector3();
         int lastIndex = 0;
         if (_isFirstRun)
@@ -93,37 +96,26 @@ public partial class LevelBuilder : Node
                 var startSocketPosition = socketNodes[0].Position;
                 socketNodes[0].Use();
                 currentSocketPosition = startSocketPosition;
+                grid[(0, 0)] = _start as Room;
             }
         }
 
-        while (_roomPool.Count > 0)
-        {
-            int index = _random.Next(_roomPool.Count);
-            if (index != lastIndex)
-            {
-                var room = _roomPool[index];
-                var availableSockets = GetAllSockets(room);
-                var freeSocket = GetAvailableSocket(availableSockets);
-                if (freeSocket != null)
-                {
-                    freeSocket.Use();
-                    GD.Print($"Aligning room {index} Pool is size:{_roomPool.Count}");
-                    room.GlobalPosition += currentSocketPosition - freeSocket.Position;
-                    currentSocketPosition = freeSocket.Position;
-                    lastIndex = index;
-                }
-                else
-                {
-                    _roomPool.RemoveAt(index);
-                    GD.Print($"Remove room {index} Pool is size:{_roomPool.Count}");
-                }
-            }
-        }
+        int index = _random.Next(_roomPool.Count);
+        var room = _roomPool[0];
+        AttachRoom(_start, room, "ENTRY", "EXIT");
+        var newroom = _roomPool[1];
+        AttachRoom(room,newroom, "ENTRY", "EXIT");
     }
 
     private RoomSocket GetAvailableSocket(List<RoomSocket> availableSockets)
     {
         var result = availableSockets.FirstOrDefault(x => !x.isUsed);
+        return result;
+    }
+    
+    private RoomSocket GetAvailableSocketOppositeSite(List<RoomSocket> availableSockets, Direction dir)
+    {
+        var result = availableSockets.FirstOrDefault(x => !x.isUsed && x.GetDirection() == x.GetOpposite(dir));
         return result;
     }
 
@@ -145,8 +137,8 @@ public partial class LevelBuilder : Node
 
     private void GenerateRooms()
     {
-        var specialRoomCount = Level / 2;
-        var bossRoomCount = 1;
+        var specialRoomCount = 0;
+        var bossRoomCount = 0;
         int idRun;
 
         PrepareDefaultRooms();
@@ -178,4 +170,31 @@ public partial class LevelBuilder : Node
             _roomPool.Add(instance);
         }
     }
+    
+    private Room GetRoomAt(int x, int y)
+    {
+        return grid[(x, y)];
+    }
+    
+    Vector3 GetRoomSize(Node3D roomInstance)
+    {
+        var meshInstance = roomInstance.GetNode<MeshInstance3D>("MeshInstance3D");
+        var aabb = meshInstance.GetAabb();
+
+        return aabb.Size;
+    }
+    
+    void AttachRoom(Node3D startRoom, Node3D newRoom, string startMarkerName, string newMarkerName)
+    {
+        Marker3D startMarker = startRoom.GetNode<Marker3D>(startMarkerName);
+        Marker3D newMarker = newRoom.GetNode<Marker3D>(newMarkerName);
+        
+
+        // Berechne Offset zwischen Marker und Raum Pivot
+        Vector3 markerToRoom = newRoom.GlobalPosition - newMarker.GlobalPosition;
+        // Setze neuen Raum
+        newRoom.GlobalPosition = startMarker.GlobalPosition + markerToRoom;
+
+    }
+    
 }

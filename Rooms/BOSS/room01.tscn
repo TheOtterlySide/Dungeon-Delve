@@ -14,6 +14,8 @@ albedo_texture = ExtResource("1_7lju3")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_b8058"]
+
 [node name="Room01" type="Node3D" unique_id=200813247]
 
 [node name="ENTRY" type="Marker3D" parent="." unique_id=1466562795 groups=["SOCKET"]]
@@ -36,3 +38,6 @@ transform = Transform3D(2.0491152, 0, 0, 0, 1, 0, 0, 0, 2.0151305, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=915896785]
+mesh = SubResource("PlaneMesh_b8058")
