@@ -19,11 +19,13 @@ albedo_texture = ExtResource("1_782l8")
 [node name="Room01" type="Node3D" unique_id=1984975237]
 script = ExtResource("1_e1bfu")
 
-[node name="ENTRY" type="Marker3D" parent="." unique_id=493401489 groups=["SOCKET"]]
+[node name="Sockets" type="Node3D" parent="." unique_id=834100565]
+
+[node name="ENTRY" type="Marker3D" parent="Sockets" unique_id=493401489 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
 script = ExtResource("1_014kx")
 
-[node name="EXIT" type="Marker3D" parent="." unique_id=623194697 groups=["SOCKET"]]
+[node name="EXIT" type="Marker3D" parent="Sockets" unique_id=623194697 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 script = ExtResource("1_014kx")
 

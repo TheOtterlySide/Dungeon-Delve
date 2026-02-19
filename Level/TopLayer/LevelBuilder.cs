@@ -12,17 +12,17 @@ public partial class LevelBuilder : Node
 
     private Random _random = new();
     private bool _isFirstRun = true;
-    private List<Node3D> _roomPool = new();
+    private List<Room> _roomPool = new();
     private Dictionary<(int x, int y), Room> grid = new();
-    
+    private Vector2 currentGridPosition = new Vector2(0, 0);
+
     [Export] private PackedScene _startRoom;
     [Export] private PackedScene _exitRoom;
 
-    private Node3D _start;
-    private Node3D _exit;
+    private Room _start;
+    private Room _exit;
 
-    [ExportGroup("Paths")] 
-    [Export] private string _roomPath;
+    [ExportGroup("Paths")] [Export] private string _roomPath;
     [Export] private string _specialRoomPath;
     [Export] private string _bossRoomPath;
 
@@ -44,7 +44,7 @@ public partial class LevelBuilder : Node
         GetRoomScene(normalRoamLoader, _roomPath, RoomType.normal);
         GetRoomScene(speciaLoader, _specialRoomPath, RoomType.special);
         GetRoomScene(bossLoader, _bossRoomPath, RoomType.boss);
-        
+
         GenerateRooms();
         AlignRooms();
     }
@@ -84,9 +84,11 @@ public partial class LevelBuilder : Node
 
     private void AlignRooms()
     {
-        
         var currentSocketPosition = new Vector3();
+        var currentSocketDirection = Direction.North;
+        var currentSocket = new RoomSocket();
         int lastIndex = 0;
+
         if (_isFirstRun)
         {
             _isFirstRun = false;
@@ -94,36 +96,36 @@ public partial class LevelBuilder : Node
             if (socketNodes.Count > 0)
             {
                 var startSocketPosition = socketNodes[0].Position;
+                currentSocket = socketNodes[0];
                 socketNodes[0].Use();
                 currentSocketPosition = startSocketPosition;
-                grid[(0, 0)] = _start as Room;
+                currentSocketDirection = socketNodes[0].GetDirection();
+                grid[((int x, int y))(currentGridPosition.X, currentGridPosition.Y)] = _start as Room;
             }
         }
 
         int index = _random.Next(_roomPool.Count);
-        var room = _roomPool[0];
-        AttachRoom(_start, room, "ENTRY", "EXIT");
+        var roomNode3D = _roomPool[0];
+        var freeSocket = roomNode3D.GetAvailableSocket();
+
+
+        currentGridPosition = MoveInGrid(currentGridPosition, currentSocketDirection);
+
+
+        roomNode3D = AttachRoom(_start, roomNode3D, currentSocket.Name, true);
         var newroom = _roomPool[1];
-        AttachRoom(room,newroom, "ENTRY", "EXIT");
+        newroom = AttachRoom(roomNode3D, newroom, freeSocket.Name);  
+        var newnewroom = _roomPool[2];
+        freeSocket = newroom.GetAvailableSocket();
+        newroom = AttachRoom(newroom, newnewroom, freeSocket.Name);
     }
 
-    private RoomSocket GetAvailableSocket(List<RoomSocket> availableSockets)
-    {
-        var result = availableSockets.FirstOrDefault(x => !x.isUsed);
-        return result;
-    }
-    
-    private RoomSocket GetAvailableSocketOppositeSite(List<RoomSocket> availableSockets, Direction dir)
-    {
-        var result = availableSockets.FirstOrDefault(x => !x.isUsed && x.GetDirection() == x.GetOpposite(dir));
-        return result;
-    }
 
     private List<RoomSocket> GetAllSockets(Node3D start)
     {
         var sockets = new List<RoomSocket>();
-
-        var children = start.GetChildren();
+        var startSockets = start.GetNode<Node3D>("Sockets");
+        var children = startSockets.GetChildren();
         foreach (var child in children)
         {
             if (child is RoomSocket socket)
@@ -139,7 +141,6 @@ public partial class LevelBuilder : Node
     {
         var specialRoomCount = 0;
         var bossRoomCount = 0;
-        int idRun;
 
         PrepareDefaultRooms();
 
@@ -150,11 +151,11 @@ public partial class LevelBuilder : Node
 
     private void PrepareDefaultRooms()
     {
-        var instance = (Node3D)_startRoom.Instantiate();
+        var instance = (Room)_startRoom.Instantiate();
         _start = instance;
         AddChild(instance);
 
-        var endRoom = (Node3D)_exitRoom.Instantiate();
+        var endRoom = (Room)_exitRoom.Instantiate();
         _exit = endRoom;
         AddChild(endRoom);
         _roomPool.Add(endRoom);
@@ -165,36 +166,47 @@ public partial class LevelBuilder : Node
         for (int i = 0; i < maxCount; i++)
         {
             var sceneToInstantiate = scenesToInstantiate[_random.Next(0, scenesToInstantiate.Count)];
-            var instance = (Node3D)sceneToInstantiate.Instantiate();
+            var instance = (Room)sceneToInstantiate.Instantiate();
             AddChild(instance);
             _roomPool.Add(instance);
         }
     }
-    
+
     private Room GetRoomAt(int x, int y)
     {
         return grid[(x, y)];
     }
-    
-    Vector3 GetRoomSize(Node3D roomInstance)
+
+    private Vector2 MoveInGrid(Vector2 currentPosition, Direction dir)
     {
-        var meshInstance = roomInstance.GetNode<MeshInstance3D>("MeshInstance3D");
-        var aabb = meshInstance.GetAabb();
-
-        return aabb.Size;
+        return dir switch
+        {
+            Direction.North => new Vector2(currentPosition.X, currentPosition.Y - 1),
+            Direction.South => new Vector2(currentPosition.X, currentPosition.Y + 1),
+            Direction.East => new Vector2(currentPosition.X + 1, currentPosition.Y),
+            Direction.West => new Vector2(currentPosition.X - 1, currentPosition.Y),
+            _ => currentPosition
+        };
     }
-    
-    void AttachRoom(Node3D startRoom, Node3D newRoom, string startMarkerName, string newMarkerName)
+
+    Room AttachRoom(Room startRoom, Room newRoom, string startMarkerName, bool usex2 = false)
     {
-        Marker3D startMarker = startRoom.GetNode<Marker3D>(startMarkerName);
-        Marker3D newMarker = newRoom.GetNode<Marker3D>(newMarkerName);
-        
+        var start = startRoom.GetNode<Node3D>("Sockets");
+        Marker3D startMarker = start.GetNode<Marker3D>(startMarkerName);
+        var newMarker = newRoom.GetNode<Node3D>("Sockets").GetNode<Marker3D>(startMarkerName);
+        if (usex2)
+        {
+            newRoom.GlobalPosition = 2 * startMarker.GlobalPosition;
+        }
+        else
+        {
+            // Vector3 markerToRoom = newRoom.GlobalPosition - newMarker.GlobalPosition * 2;
+            Vector3 markerToRoom = new Vector3(2, 0, 0);
+            var dir = startMarker.GlobalPosition.Normalized();
+            var result = markerToRoom * dir;
+            newRoom.GlobalPosition = startMarker.GlobalPosition + result;
+        }
 
-        // Berechne Offset zwischen Marker und Raum Pivot
-        Vector3 markerToRoom = newRoom.GlobalPosition - newMarker.GlobalPosition;
-        // Setze neuen Raum
-        newRoom.GlobalPosition = startMarker.GlobalPosition + markerToRoom;
-
+        return newRoom;
     }
-    
 }

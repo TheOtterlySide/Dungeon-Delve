@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dwdgtrqagd8xm"]
 
 [ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_0uwqq"]
+[ext_resource type="Script" uid="uid://dw18by1y8231d" path="res://Rooms/Room.cs" id="1_lnf7o"]
 [ext_resource type="Script" uid="uid://cjh5na3fmkfe0" path="res://Rooms/SPECIAL/RoomSocket.cs" id="1_vrssw"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_782l8"]
@@ -17,13 +18,16 @@ albedo_texture = ExtResource("1_0uwqq")
 [sub_resource type="PlaneMesh" id="PlaneMesh_vrssw"]
 
 [node name="Room02" type="Node3D" unique_id=1954652902]
+script = ExtResource("1_lnf7o")
 
-[node name="ENTRY" type="Marker3D" parent="." unique_id=1609050605 groups=["SOCKET"]]
+[node name="Sockets" type="Node3D" parent="." unique_id=540978705]
+
+[node name="ENTRY" type="Marker3D" parent="Sockets" unique_id=1609050605 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 gizmo_extents = 7.25
 script = ExtResource("1_vrssw")
 
-[node name="EXIT" type="Marker3D" parent="." unique_id=255610628 groups=["SOCKET"]]
+[node name="EXIT" type="Marker3D" parent="Sockets" unique_id=255610628 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 gizmo_extents = 5.25
 script = ExtResource("1_vrssw")
