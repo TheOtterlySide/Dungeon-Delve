@@ -1,6 +1,7 @@
-using Godot;
-using System;
 using DungeonDelve.Level.Common;
+using Godot;
+
+namespace DungeonDelve.Rooms.SPECIAL;
 
 public partial class RoomSocket : Marker3D
 {

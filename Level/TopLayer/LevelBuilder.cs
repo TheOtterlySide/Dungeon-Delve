@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DungeonDelve.Level.Common;
+using DungeonDelve.Rooms.SPECIAL;
 
 public partial class LevelBuilder : Node
 {
@@ -86,7 +87,7 @@ public partial class LevelBuilder : Node
     {
         var currentSocketPosition = new Vector3();
         var currentSocketDirection = Direction.North;
-        var currentSocket = new RoomSocket();
+        var currentSocket = new DungeonDelve.Rooms.SPECIAL.RoomSocket();
         int lastIndex = 0;
 
         if (_isFirstRun)
@@ -121,14 +122,14 @@ public partial class LevelBuilder : Node
     }
 
 
-    private List<RoomSocket> GetAllSockets(Node3D start)
+    private List<DungeonDelve.Rooms.SPECIAL.RoomSocket> GetAllSockets(Node3D start)
     {
-        var sockets = new List<RoomSocket>();
+        var sockets = new List<DungeonDelve.Rooms.SPECIAL.RoomSocket>();
         var startSockets = start.GetNode<Node3D>("Sockets");
         var children = startSockets.GetChildren();
         foreach (var child in children)
         {
-            if (child is RoomSocket socket)
+            if (child is DungeonDelve.Rooms.SPECIAL.RoomSocket socket)
             {
                 sockets.Add(socket);
             }
@@ -191,22 +192,58 @@ public partial class LevelBuilder : Node
 
     Room AttachRoom(Room startRoom, Room newRoom, string startMarkerName, bool usex2 = false)
     {
+        var startRoomPosition = startRoom.GlobalPosition;
+        
         var start = startRoom.GetNode<Node3D>("Sockets");
         Marker3D startMarker = start.GetNode<Marker3D>(startMarkerName);
         var newMarker = newRoom.GetNode<Node3D>("Sockets").GetNode<Marker3D>(startMarkerName);
+        
         if (usex2)
         {
             newRoom.GlobalPosition = 2 * startMarker.GlobalPosition;
         }
         else
         {
-            // Vector3 markerToRoom = newRoom.GlobalPosition - newMarker.GlobalPosition * 2;
-            Vector3 markerToRoom = new Vector3(2, 0, 0);
-            var dir = startMarker.GlobalPosition.Normalized();
-            var result = markerToRoom * dir;
-            newRoom.GlobalPosition = startMarker.GlobalPosition + result;
+            Vector3 markerToRoom = newRoom.GlobalPosition - newMarker.GlobalPosition * 2;
+            var test = startMarker as RoomSocket;
+            var dir = test.GetDirection();
+            switch (dir)
+            {
+                case Direction.North:
+                    // -z
+                    markerToRoom = new Vector3(0, 0, -2);
+                    break;
+                case Direction.South:
+                    // +z
+                    markerToRoom = new Vector3(0, 0, 2);
+                    break;
+                case Direction.East:
+                    // +x
+                    markerToRoom = new Vector3(2, 0, 0);
+                    break;
+                case Direction.West:
+                    // -x
+                    markerToRoom = new Vector3(-2, 0, 0);
+                    break;
+                default:
+                    break;
+            }
+            var result = markerToRoom * GetDirectionVector(dir);
+            newRoom.GlobalPosition = startRoomPosition + 2 * result;
         }
 
         return newRoom;
+    }
+    
+    Vector3 GetDirectionVector(Direction dir)
+    {
+        return dir switch
+        {
+            Direction.North => new Vector3(0, 0, -1),
+            Direction.South => new Vector3(0, 0, 1),
+            Direction.East => new Vector3(1, 0, 0),
+            Direction.West => new Vector3(-1, 0, 0),
+            _ => new Vector3()
+        };
     }
 }
