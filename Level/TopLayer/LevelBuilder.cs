@@ -29,6 +29,8 @@ public partial class LevelBuilder : Node
     [Export] private string _bossRoomPath;
 
     public int Level { get; set; }
+    [Export]private float _roomSpacing = 4f;
+    
 
     public LevelBuilder()
     {
@@ -190,62 +192,24 @@ public partial class LevelBuilder : Node
             _ => currentPosition
         };
     }
-
+    
     Room AttachRoom(Room startRoom, Room newRoom, string startMarkerName, bool usex2 = false)
     {
-        var startRoomPosition = startRoom.GlobalPosition;
+        var startMarker = startRoom.GetNode<Node3D>("Sockets").GetNode<Marker3D>(startMarkerName);
 
-        var start = startRoom.GetNode<Node3D>("Sockets");
-        Marker3D startMarker = start.GetNode<Marker3D>(startMarkerName);
-        var newMarker = newRoom.GetNode<Node3D>("Sockets").GetNode<Marker3D>(startMarkerName);
-
-        if (usex2)
-        {
-            newRoom.GlobalPosition = 2 * startMarker.GlobalPosition;
-        }
-        else
-        {
-            Vector3 markerToRoom = new Vector3();
-            var startMarkerAsRoomSocket = startMarker as RoomSocket;
-            var dir = startMarkerAsRoomSocket.GetDirection();
-            switch (dir)
-            {
-                case Direction.North:
-                    // -z
-                    markerToRoom = new Vector3(0, 0, -2);
-                    break;
-                case Direction.South:
-                    // +z
-                    markerToRoom = new Vector3(0, 0, 2);
-                    break;
-                case Direction.East:
-                    // +x
-                    markerToRoom = new Vector3(2, 0, 0);
-                    break;
-                case Direction.West:
-                    // -x
-                    markerToRoom = new Vector3(-2, 0, 0);
-                    break;
-                default:
-                    break;
-            }
-
-            var result = markerToRoom * GetDirectionVector(dir);
-            newRoom.GlobalPosition = startRoomPosition + 2 * result;
-        }
+        newRoom.GlobalPosition = usex2
+            ? 2 * startMarker.GlobalPosition
+            : startRoom.GlobalPosition + _roomSpacing * GetDirectionVector(((RoomSocket)startMarker).GetDirection());
 
         return newRoom;
     }
 
-    Vector3 GetDirectionVector(Direction dir)
+    Vector3 GetDirectionVector(Direction dir) => dir switch
     {
-        return dir switch
-        {
-            Direction.North => new Vector3(0, 0, -1),
-            Direction.South => new Vector3(0, 0, 1),
-            Direction.East => new Vector3(1, 0, 0),
-            Direction.West => new Vector3(-1, 0, 0),
-            _ => new Vector3()
-        };
-    }
+        Direction.North => Vector3.Back,    // (0, 0, -1)
+        Direction.South => Vector3.Forward, // (0, 0,  1)
+        Direction.East  => Vector3.Right,   // (1, 0,  0)
+        Direction.West  => Vector3.Left,    // (-1, 0, 0)
+        _ => Vector3.Zero
+    };
 }
