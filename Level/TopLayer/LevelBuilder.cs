@@ -99,29 +99,32 @@ public partial class LevelBuilder : Node
             var socketNodes = GetAllSockets(_start);
             if (socketNodes.Count > 0)
             {
-                var startSocketPosition = socketNodes[0].Position;
                 currentSocket = socketNodes[0];
-                socketNodes[0].Use();
-                currentSocketPosition = startSocketPosition;
+                currentSocket.Use();
                 currentSocketDirection = socketNodes[0].GetDirection();
                 grid[((int x, int y))(currentGridPosition.X, currentGridPosition.Y)] = _start as Room;
             }
         }
 
-        int index = _random.Next(_roomPool.Count);
-        var roomNode3D = _roomPool[0];
-        var freeSocket = roomNode3D.GetAvailableSocket();
+        var currentRoom = _start as Room;
 
+        while (_roomPool.Count > 0)
+        {
+            var nextRoom = _roomPool[0];
+            _roomPool.RemoveAt(0);
 
+            currentGridPosition = MoveInGrid(currentGridPosition, currentSocketDirection);
+            currentRoom = AttachRoom(currentRoom, nextRoom, currentSocket.Name);
+
+            var freeSocket = currentRoom.GetAvailableSocket();
+            if (freeSocket == null) break;
+
+            currentSocket = freeSocket;
+            currentSocketDirection = freeSocket.GetDirection();
+        }
+        
         currentGridPosition = MoveInGrid(currentGridPosition, currentSocketDirection);
-
-
-        roomNode3D = AttachRoom(_start, roomNode3D, currentSocket.Name, true);
-        var newroom = _roomPool[1];
-        newroom = AttachRoom(roomNode3D, newroom, freeSocket.Name);
-        var newnewroom = _roomPool[2];
-        freeSocket = newroom.GetAvailableSocket();
-        newroom = AttachRoom(newroom, newnewroom, freeSocket.Name);
+        AttachRoom(currentRoom, _exit, currentSocket.Name);
     }
 
 
@@ -162,7 +165,6 @@ public partial class LevelBuilder : Node
         var endRoom = (Room)_exitRoom.Instantiate();
         _exit = endRoom;
         AddChild(endRoom);
-        _roomPool.Add(endRoom);
     }
 
     private void InstantiateRoomAndPlace(List<PackedScene> scenesToInstantiate, int maxCount)
@@ -193,13 +195,11 @@ public partial class LevelBuilder : Node
         };
     }
     
-    Room AttachRoom(Room startRoom, Room newRoom, string startMarkerName, bool usex2 = false)
+    Room AttachRoom(Room startRoom, Room newRoom, string startMarkerName)
     {
         var startMarker = startRoom.GetNode<Node3D>("Sockets").GetNode<Marker3D>(startMarkerName);
 
-        newRoom.GlobalPosition = usex2
-            ? 2 * startMarker.GlobalPosition
-            : startRoom.GlobalPosition + _roomSpacing * GetDirectionVector(((RoomSocket)startMarker).GetDirection());
+        newRoom.GlobalPosition = startRoom.GlobalPosition + _roomSpacing * GetDirectionVector(((RoomSocket)startMarker).GetDirection());
 
         return newRoom;
     }
