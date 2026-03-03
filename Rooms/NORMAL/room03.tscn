@@ -4,6 +4,13 @@
 [ext_resource type="Script" uid="uid://dw18by1y8231d" path="res://Rooms/Room.cs" id="1_diip8"]
 [ext_resource type="Script" uid="uid://cjh5na3fmkfe0" path="res://Rooms/SPECIAL/RoomSocket.cs" id="1_wx36v"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wx36v"]
+albedo_color = Color(0.72457516, 0.6189647, 3.85046e-07, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_p2ql0"]
+material = SubResource("StandardMaterial3D_wx36v")
+size = Vector2(1, 1)
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_782l8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_014kx"]
@@ -15,8 +22,6 @@ albedo_texture = ExtResource("1_ao7at")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_p2ql0"]
-
 [node name="Room03" type="Node3D" unique_id=1679654908]
 script = ExtResource("1_diip8")
 
@@ -25,10 +30,18 @@ script = ExtResource("1_diip8")
 [node name="ENTRY" type="Marker3D" parent="Sockets" unique_id=326446463 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 script = ExtResource("1_wx36v")
+SocketDirection = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sockets/ENTRY" unique_id=1558538144]
+mesh = SubResource("PlaneMesh_p2ql0")
 
 [node name="EXIT" type="Marker3D" parent="Sockets" unique_id=179086182 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 script = ExtResource("1_wx36v")
+SocketDirection = 3
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sockets/EXIT" unique_id=439123341]
+mesh = SubResource("PlaneMesh_p2ql0")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=359915695]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
@@ -42,6 +55,3 @@ shape = SubResource("BoxShape3D_014kx")
 material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1884643726]
-mesh = SubResource("PlaneMesh_p2ql0")

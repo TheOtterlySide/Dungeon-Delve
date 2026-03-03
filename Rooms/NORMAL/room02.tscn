@@ -4,6 +4,13 @@
 [ext_resource type="Script" uid="uid://dw18by1y8231d" path="res://Rooms/Room.cs" id="1_lnf7o"]
 [ext_resource type="Script" uid="uid://cjh5na3fmkfe0" path="res://Rooms/SPECIAL/RoomSocket.cs" id="1_vrssw"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lnf7o"]
+albedo_color = Color(0, 1.698912, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vrssw"]
+material = SubResource("StandardMaterial3D_lnf7o")
+size = Vector2(1, 1)
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_782l8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_014kx"]
@@ -15,8 +22,6 @@ albedo_texture = ExtResource("1_0uwqq")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_vrssw"]
-
 [node name="Room02" type="Node3D" unique_id=1954652902]
 script = ExtResource("1_lnf7o")
 
@@ -26,11 +31,23 @@ script = ExtResource("1_lnf7o")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 gizmo_extents = 7.25
 script = ExtResource("1_vrssw")
+SocketDirection = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sockets/ENTRY" unique_id=1506929061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.045859575)
+mesh = SubResource("PlaneMesh_vrssw")
+skeleton = NodePath("../../..")
 
 [node name="EXIT" type="Marker3D" parent="Sockets" unique_id=255610628 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 gizmo_extents = 5.25
 script = ExtResource("1_vrssw")
+SocketDirection = 3
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sockets/EXIT" unique_id=382718600]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.045859575)
+mesh = SubResource("PlaneMesh_vrssw")
+skeleton = NodePath("../../..")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1115786968]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
@@ -43,6 +60,3 @@ shape = SubResource("BoxShape3D_014kx")
 material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1506929061]
-mesh = SubResource("PlaneMesh_vrssw")

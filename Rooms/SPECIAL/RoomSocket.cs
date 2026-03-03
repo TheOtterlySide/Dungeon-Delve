@@ -5,41 +5,23 @@ namespace DungeonDelve.Rooms.SPECIAL;
 
 public partial class RoomSocket : Marker3D
 {
-    private Direction Direction;
+    [Export] public Direction SocketDirection; 
     public bool isUsed;
     
     public void Use()
     {
-        if (isUsed)
-        {
-            return;
-        }
-
+        if (isUsed) return;
         isUsed = true;
     }
 
-    public Direction GetDirection()
-    {
-        var globalPosition = GlobalPosition;
-
-        if (Mathf.Abs(globalPosition.X) > Mathf.Abs(globalPosition.Z))
-        {
-            return globalPosition.X > 0 ? Direction.West : Direction.East;
-        }
-
-        return globalPosition.Z > 0 ? Direction.South : Direction.North;
-    }
+    public Direction GetDirection() => SocketDirection;
     
-    public Direction GetOpposite(Direction dir)
+    public Direction GetOpposite(Direction dir) => dir switch
     {
-        return dir switch
-        {
-            Direction.North => Direction.South,
-            Direction.South => Direction.North,
-            Direction.East  => Direction.West,
-            Direction.West  => Direction.East,
-            _ => dir
-        };
-    }
-    
+        Direction.North => Direction.South,
+        Direction.South => Direction.North,
+        Direction.East  => Direction.West,
+        Direction.West  => Direction.East,
+        _ => dir
+    };
 }
