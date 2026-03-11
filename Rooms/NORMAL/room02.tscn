@@ -25,6 +25,14 @@ albedo_texture = ExtResource("1_0uwqq")
 [node name="Room02" type="Node3D" unique_id=1954652902]
 script = ExtResource("1_lnf7o")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1506929061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.9541404)
+mesh = SubResource("PlaneMesh_vrssw")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=382718600]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.0458596)
+mesh = SubResource("PlaneMesh_vrssw")
+
 [node name="Sockets" type="Node3D" parent="." unique_id=540978705]
 
 [node name="ENTRY" type="Marker3D" parent="Sockets" unique_id=1609050605 groups=["SOCKET"]]
@@ -33,21 +41,11 @@ gizmo_extents = 7.25
 script = ExtResource("1_vrssw")
 SocketDirection = 1
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Sockets/ENTRY" unique_id=1506929061]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.045859575)
-mesh = SubResource("PlaneMesh_vrssw")
-skeleton = NodePath("../../..")
-
 [node name="EXIT" type="Marker3D" parent="Sockets" unique_id=255610628 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 gizmo_extents = 5.25
 script = ExtResource("1_vrssw")
 SocketDirection = 3
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Sockets/EXIT" unique_id=382718600]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.045859575)
-mesh = SubResource("PlaneMesh_vrssw")
-skeleton = NodePath("../../..")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1115786968]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)

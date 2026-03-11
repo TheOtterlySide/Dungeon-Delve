@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_r0ksi"]
 [ext_resource type="Script" uid="uid://ciaqikprrn335" path="res://Level/TopLayer/LevelBuilder.cs" id="2_8q7dr"]
 [ext_resource type="Script" uid="uid://dy6inbrockvv6" path="res://Level/Common/Player.cs" id="2_87g2j"]
+[ext_resource type="PackedScene" uid="uid://bax6r5bdmslfh" path="res://Rooms/StartRoom.tscn" id="3_h4a57"]
+[ext_resource type="PackedScene" uid="uid://bgpl716ogfcp" path="res://Rooms/EndRoom.tscn" id="4_v2rt0"]
 [ext_resource type="PackedScene" uid="uid://cdfcr6mxtg350" path="res://Rooms/NORMAL/room01.tscn" id="5_8q7dr"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l60kp"]
@@ -27,8 +29,8 @@ _levelBuilder = NodePath("LevelBuilder")
 
 [node name="LevelBuilder" type="Node" parent="GameManager" unique_id=735112104]
 script = ExtResource("2_8q7dr")
-_startRoom = ExtResource("5_8q7dr")
-_exitRoom = ExtResource("5_8q7dr")
+_startRoom = ExtResource("3_h4a57")
+_exitRoom = ExtResource("4_v2rt0")
 _roomPath = "res://Rooms/NORMAL/"
 _specialRoomPath = "res://Rooms/SPECIAL/"
 _bossRoomPath = "res://Rooms/BOSS/"
