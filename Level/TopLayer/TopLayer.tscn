@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://dy6inbrockvv6" path="res://Level/Common/Player.cs" id="2_87g2j"]
 [ext_resource type="PackedScene" uid="uid://bax6r5bdmslfh" path="res://Rooms/StartRoom.tscn" id="3_h4a57"]
 [ext_resource type="PackedScene" uid="uid://bgpl716ogfcp" path="res://Rooms/EndRoom.tscn" id="4_v2rt0"]
-[ext_resource type="PackedScene" uid="uid://cdfcr6mxtg350" path="res://Rooms/NORMAL/room01.tscn" id="5_8q7dr"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l60kp"]
 
@@ -81,8 +80,6 @@ omni_attenuation = -0.096
 [node name="AkBank" type="AkBank" parent="." unique_id=1140723936]
 
 [node name="AkListener3D" type="AkListener3D" parent="." unique_id=529153200]
-
-[node name="Room01" parent="." unique_id=583662802 instance=ExtResource("5_8q7dr")]
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=307937649]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 128.17575, 0)

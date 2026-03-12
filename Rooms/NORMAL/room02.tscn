@@ -4,13 +4,6 @@
 [ext_resource type="Script" uid="uid://dw18by1y8231d" path="res://Rooms/Room.cs" id="1_lnf7o"]
 [ext_resource type="Script" uid="uid://cjh5na3fmkfe0" path="res://Rooms/SPECIAL/RoomSocket.cs" id="1_vrssw"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lnf7o"]
-albedo_color = Color(0, 1.698912, 0, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_vrssw"]
-material = SubResource("StandardMaterial3D_lnf7o")
-size = Vector2(1, 1)
-
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_782l8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_014kx"]
@@ -22,30 +15,39 @@ albedo_texture = ExtResource("1_0uwqq")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_lnf7o"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_62f1h"]
+size = Vector2(1, 1)
+
 [node name="Room02" type="Node3D" unique_id=1954652902]
 script = ExtResource("1_lnf7o")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1506929061]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.9541404)
-mesh = SubResource("PlaneMesh_vrssw")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=382718600]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.0458596)
-mesh = SubResource("PlaneMesh_vrssw")
-
 [node name="Sockets" type="Node3D" parent="." unique_id=540978705]
 
-[node name="ENTRY" type="Marker3D" parent="Sockets" unique_id=1609050605 groups=["SOCKET"]]
+[node name="East" type="Marker3D" parent="Sockets" unique_id=1609050605 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 gizmo_extents = 7.25
 script = ExtResource("1_vrssw")
 SocketDirection = 1
 
-[node name="EXIT" type="Marker3D" parent="Sockets" unique_id=255610628 groups=["SOCKET"]]
+[node name="West" type="Marker3D" parent="Sockets" unique_id=255610628 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 gizmo_extents = 5.25
 script = ExtResource("1_vrssw")
 SocketDirection = 3
+
+[node name="North" type="Marker3D" parent="Sockets" unique_id=1996767906 groups=["SOCKET"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+gizmo_extents = 5.25
+script = ExtResource("1_vrssw")
+
+[node name="South" type="Marker3D" parent="Sockets" unique_id=793967232 groups=["SOCKET"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+gizmo_extents = 5.25
+script = ExtResource("1_vrssw")
+SocketDirection = 2
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1115786968]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
@@ -58,3 +60,21 @@ shape = SubResource("BoxShape3D_014kx")
 material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=74448146]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=524898819]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
+mesh = SubResource("PlaneMesh_lnf7o")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=411842571]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.5)
+mesh = SubResource("PlaneMesh_lnf7o")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=1542887005]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 1.5)
+mesh = SubResource("PlaneMesh_lnf7o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1037087294]
+transform = Transform3D(0.9999799, 0, -0.006335503, 0, 1, 0, 0.006335503, 0, 0.9999799, 1.5, 0.1, 0)
+mesh = SubResource("PlaneMesh_62f1h")

@@ -15,7 +15,7 @@ public partial class LevelBuilder : Node
     private bool _isFirstRun = true;
     private List<Room> _roomPool = new();
     private Dictionary<(int x, int y), Room> grid = new();
-    private Vector2 currentGridPosition = new Vector2(0, 0);
+    private Vector2 currentGridCursorPosition = new Vector2(0, 0);
 
     [Export] private PackedScene _startRoom;
     [Export] private PackedScene _exitRoom;
@@ -89,117 +89,42 @@ public partial class LevelBuilder : Node
 
     private void AlignRooms()
     {
-        if (_isFirstRun)
-        {
-            _isFirstRun = false;
-            grid[((int)currentGridPosition.X, (int)currentGridPosition.Y)] = _start;
-        }
-
         var currentRoom = _start;
-        
+        SetRoomInGrid(currentRoom, currentGridCursorPosition);
 
         while (_roomPool.Count > 0)
         {
             var nextRoom = _roomPool[0];
-
-            var (freeSocket, freeGridPos) = FindFreeSocketAndPosition(currentRoom, currentGridPosition);
+            var freeSocket = currentRoom.GetAvailableSocket();
 
             if (freeSocket != null)
             {
-                _roomPool.RemoveAt(0);
                 freeSocket.Use();
-
-                currentGridPosition = freeGridPos;
-                grid[((int)currentGridPosition.X, (int)currentGridPosition.Y)] = nextRoom;
-
-                currentRoom = AttachRoom(currentRoom, nextRoom, freeSocket.Name);
-            }
-            else
-            {
-                var (fallbackRoom, fallbackSocket, fallbackPos) = FindAnyFreePositionInGrid();
-
-                if (fallbackSocket != null)
+                _roomPool.RemoveAt(0);
+                if (!IsGridOccupied(GetDirectionVector(freeSocket.SocketDirection)))
                 {
-                    _roomPool.RemoveAt(0);
-                    fallbackSocket.Use();
-
-                    currentRoom = fallbackRoom;
-                    currentGridPosition = fallbackPos;
-                    grid[((int)currentGridPosition.X, (int)currentGridPosition.Y)] = nextRoom;
-
-                    currentRoom = AttachRoom(currentRoom, nextRoom, fallbackSocket.Name);
-                }
-                else
-                {
-                    //No Free Room
-                    break;
+                    currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeSocket.GetDirection());
+                    SetRoomInGrid(nextRoom, currentGridCursorPosition);
+                    currentRoom = AttachRoom(currentRoom, nextRoom, freeSocket);
                 }
             }
         }
-
+        
         // Exit-Room
-        var (exitSocket, exitGridPos) = FindFreeSocketAndPosition(currentRoom, currentGridPosition);
-        if (exitSocket != null)
-        {
-            exitSocket.Use();
-            grid[((int)exitGridPos.X, (int)exitGridPos.Y)] = _exit;
-            AttachRoom(currentRoom, _exit, exitSocket.Name);
-        }
+        var freeExitSocket = currentRoom.GetAvailableSocket();
+        currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeExitSocket.GetDirection());
+        SetRoomInGrid(_exit, currentGridCursorPosition);
+        var room =  AttachRoom(currentRoom, _exit, freeExitSocket);
     }
 
-    private (RoomSocket socket, Vector2 gridPos) FindFreeSocketAndPosition(Room room, Vector2 roomGridPos)
+    private void SetRoomInGrid(Room currentRoom, Vector2 currentGridPosition)
     {
-        var sockets = GetAllSockets(room);
-        foreach (var socket in sockets)
-        {
-            if (socket.isUsed) continue;
-            var dir = socket.GetDirection();
-            var nextPos = MoveInGrid(roomGridPos, dir);
-
-            if (!IsGridOccupied(nextPos))
-            {
-                return (socket, nextPos);
-            }
-        }
-
-        return (null, Vector2.Zero);
+        grid[((int)currentGridPosition.X, (int)currentGridPosition.Y)] = currentRoom;
     }
 
-    private (Room room, RoomSocket socket, Vector2 gridPos) FindAnyFreePositionInGrid()
+    private bool IsGridOccupied(Vector3 pos)
     {
-        foreach (var (pos, room) in grid)
-        {
-            var roomGridPos = new Vector2(pos.x, pos.y);
-            var (socket, freePos) = FindFreeSocketAndPosition(room, roomGridPos);
-            if (socket != null)
-            {
-                return (room, socket, freePos);
-            }
-        }
-
-        return (null, null, Vector2.Zero);
-    }
-
-    private bool IsGridOccupied(Vector2 pos)
-    {
-        return grid.ContainsKey(((int)pos.X, (int)pos.Y));
-    }
-
-
-    private List<RoomSocket> GetAllSockets(Node3D start)
-    {
-        var sockets = new List<RoomSocket>();
-        var startSockets = start.GetNode<Node3D>("Sockets");
-        var children = startSockets.GetChildren();
-        foreach (var child in children)
-        {
-            if (child is RoomSocket socket)
-            {
-                sockets.Add(socket);
-            }
-        }
-
-        return sockets;
+        return grid.ContainsKey(((int)currentGridCursorPosition.X + (int)pos.X, (int)currentGridCursorPosition.Y + (int)pos.Z));
     }
 
     private void GenerateRooms()
@@ -231,6 +156,7 @@ public partial class LevelBuilder : Node
         {
             var sceneToInstantiate = scenesToInstantiate[_random.Next(0, scenesToInstantiate.Count)];
             var instance = (Room)sceneToInstantiate.Instantiate();
+
             AddChild(instance);
             _roomPool.Add(instance);
         }
@@ -254,21 +180,9 @@ public partial class LevelBuilder : Node
         };
     }
 
-    Room AttachRoom(Room startRoom, Room newRoom, string startMarkerName)
+    Room AttachRoom(Room startRoom, Room newRoom, RoomSocket socket)
     {
-        var startMarker = startRoom.GetNode<Node3D>("Sockets").GetNode<Marker3D>(startMarkerName);
-        var startMarkerDirection = ((RoomSocket)startMarker).GetDirection();
-        var oppositeDirection = ((RoomSocket)startMarker).GetOpposite(startMarkerDirection);
-        var freeSocketInNewRoom = newRoom.GetAvailableSocket();
-
-        if (freeSocketInNewRoom != null)
-        {
-            freeSocketInNewRoom.Use();
-            var rotation = GetRotationForDirection(oppositeDirection);
-            newRoom.Rotation = rotation;
-        }
-
-        newRoom.GlobalPosition = startRoom.GlobalPosition + _roomSpacing * GetDirectionVector(startMarkerDirection);
+        newRoom.GlobalPosition = startRoom.GlobalPosition + _roomSpacing * GetDirectionVector(socket.SocketDirection);
         return newRoom;
     }
 
@@ -278,15 +192,6 @@ public partial class LevelBuilder : Node
         Direction.South => Vector3.Forward, // (0, 0,  1)
         Direction.East => Vector3.Right, // (1, 0,  0)
         Direction.West => Vector3.Left, // (-1, 0, 0)
-        _ => Vector3.Zero
-    };
-
-    Vector3 GetRotationForDirection(Direction dir) => dir switch
-    {
-        Direction.North => new Vector3(0, Mathf.DegToRad(180), 0),
-        Direction.South => new Vector3(0, 0, 0),
-        Direction.East => new Vector3(0, Mathf.DegToRad(-90), 0),
-        Direction.West => new Vector3(0, Mathf.DegToRad(90), 0),
         _ => Vector3.Zero
     };
 }

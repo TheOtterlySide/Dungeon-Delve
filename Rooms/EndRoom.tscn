@@ -41,5 +41,5 @@ gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=841208009]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 0)
 mesh = SubResource("PlaneMesh_e1bfu")
