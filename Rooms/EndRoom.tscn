@@ -23,9 +23,10 @@ script = ExtResource("1_t7r1u")
 
 [node name="Sockets" type="Node3D" parent="." unique_id=834100565]
 
-[node name="EXIT" type="Marker3D" parent="Sockets" unique_id=623194697 groups=["SOCKET"]]
+[node name="East" type="Marker3D" parent="Sockets" unique_id=623194697 groups=["SOCKET"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 script = ExtResource("2_djsg5")
+SocketDirection = 1
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1214831098]
 physics_material_override = SubResource("PhysicsMaterial_782l8")

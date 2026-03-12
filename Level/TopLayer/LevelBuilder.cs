@@ -96,10 +96,12 @@ public partial class LevelBuilder : Node
         {
             var nextRoom = _roomPool[0];
             var freeSocket = currentRoom.GetAvailableSocket();
-
+            
             if (freeSocket != null)
             {
+                var oppositeSocket = nextRoom.GetAvailableSocketOppositeSite(nextRoom.roomSockets, freeSocket.GetDirection());
                 freeSocket.Use();
+                oppositeSocket.Use();
                 _roomPool.RemoveAt(0);
                 if (!IsGridOccupied(GetDirectionVector(freeSocket.SocketDirection)))
                 {
@@ -109,12 +111,12 @@ public partial class LevelBuilder : Node
                 }
             }
         }
-        
+
         // Exit-Room
         var freeExitSocket = currentRoom.GetAvailableSocket();
         currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeExitSocket.GetDirection());
         SetRoomInGrid(_exit, currentGridCursorPosition);
-        var room =  AttachRoom(currentRoom, _exit, freeExitSocket);
+        var room = AttachRoom(currentRoom, _exit, freeExitSocket);
     }
 
     private void SetRoomInGrid(Room currentRoom, Vector2 currentGridPosition)
@@ -188,8 +190,8 @@ public partial class LevelBuilder : Node
 
     Vector3 GetDirectionVector(Direction dir) => dir switch
     {
-        Direction.North => Vector3.Back, // (0, 0, -1)
-        Direction.South => Vector3.Forward, // (0, 0,  1)
+        Direction.North => Vector3.Forward, // (0, 0, 1)
+        Direction.South => Vector3.Back, // (0, 0,  -1)
         Direction.East => Vector3.Right, // (1, 0,  0)
         Direction.West => Vector3.Left, // (-1, 0, 0)
         _ => Vector3.Zero
