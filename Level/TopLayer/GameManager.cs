@@ -12,7 +12,7 @@ public partial class GameManager : Node
 
     public override void _Ready()
     {
-        _levelBuilder.Level = 2;
+        _levelBuilder.Level = 10;
         _levelBuilder.Initial();   
     }
 

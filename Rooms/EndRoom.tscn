@@ -15,7 +15,10 @@ albedo_texture = ExtResource("3_f8d7r")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_e1bfu"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_t7r1u"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_djsg5"]
 size = Vector2(1, 1)
 
 [node name="Room01" type="Node3D" unique_id=1984975237]
@@ -27,6 +30,20 @@ script = ExtResource("1_t7r1u")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 script = ExtResource("2_djsg5")
 SocketDirection = 1
+
+[node name="West" type="Marker3D" parent="Sockets" unique_id=425047541 groups=["SOCKET"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+script = ExtResource("2_djsg5")
+SocketDirection = 3
+
+[node name="North" type="Marker3D" parent="Sockets" unique_id=850233910 groups=["SOCKET"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+script = ExtResource("2_djsg5")
+
+[node name="South" type="Marker3D" parent="Sockets" unique_id=76105577 groups=["SOCKET"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+script = ExtResource("2_djsg5")
+SocketDirection = 2
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1214831098]
 physics_material_override = SubResource("PhysicsMaterial_782l8")
@@ -41,6 +58,20 @@ material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=841208009]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 0)
-mesh = SubResource("PlaneMesh_e1bfu")
+[node name="Node3D" type="Node3D" parent="." unique_id=943291367]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=882687377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
+mesh = SubResource("PlaneMesh_t7r1u")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=525548032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.5)
+mesh = SubResource("PlaneMesh_t7r1u")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=904018420]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 1.5)
+mesh = SubResource("PlaneMesh_t7r1u")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=813802971]
+transform = Transform3D(0.9999799, 0, -0.006335503, 0, 1, 0, 0.006335503, 0, 0.9999799, 1.5, 0.1, 0)
+mesh = SubResource("PlaneMesh_djsg5")

@@ -95,7 +95,7 @@ public partial class LevelBuilder : Node
         while (_roomPool.Count > 0)
         {
             var nextRoom = _roomPool[0];
-            var freeSocket = currentRoom.GetAvailableSocket();
+            var freeSocket = currentRoom.GetAvailableRandomSocket(_random);
             
             if (freeSocket != null)
             {
@@ -109,6 +109,8 @@ public partial class LevelBuilder : Node
                     SetRoomInGrid(nextRoom, currentGridCursorPosition);
                     currentRoom = AttachRoom(currentRoom, nextRoom, freeSocket);
                 }
+                
+                GD.Print(currentGridCursorPosition);
             }
         }
 

@@ -24,6 +24,13 @@ public partial class Room : Node3D
         return result;
     }
     
+    public DungeonDelve.Rooms.SPECIAL.RoomSocket GetAvailableRandomSocket(Random random)
+    {
+        var availableSockets = roomSockets.Where(x => !x.isUsed).ToList();
+        var result = random.Next(availableSockets.Count);
+        return availableSockets[result];
+    }
+    
     public List<DungeonDelve.Rooms.SPECIAL.RoomSocket> GetAvailableSocketList(List<DungeonDelve.Rooms.SPECIAL.RoomSocket> availableSockets)
     {
         return roomSockets;
