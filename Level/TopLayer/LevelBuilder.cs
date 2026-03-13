@@ -96,29 +96,33 @@ public partial class LevelBuilder : Node
         {
             var nextRoom = _roomPool[0];
             var freeSocket = currentRoom.GetAvailableRandomSocket(_random);
-            
-            if (freeSocket != null)
+
+            if (freeSocket == null) break;
+
+            if (IsGridOccupied(GetDirectionVector(freeSocket.SocketDirection)))
             {
-                var oppositeSocket = nextRoom.GetAvailableSocketOppositeSite(nextRoom.roomSockets, freeSocket.GetDirection());
                 freeSocket.Use();
-                oppositeSocket.Use();
-                _roomPool.RemoveAt(0);
-                if (!IsGridOccupied(GetDirectionVector(freeSocket.SocketDirection)))
-                {
-                    currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeSocket.GetDirection());
-                    SetRoomInGrid(nextRoom, currentGridCursorPosition);
-                    currentRoom = AttachRoom(currentRoom, nextRoom, freeSocket);
-                }
-                
-                GD.Print(currentGridCursorPosition);
+                continue;
             }
+
+            var oppositeSocket = nextRoom.GetAvailableSocketOppositeSite(nextRoom.roomSockets, freeSocket.GetDirection());
+            freeSocket.Use();
+            oppositeSocket.Use();
+            _roomPool.RemoveAt(0);
+
+            currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeSocket.GetDirection());
+            SetRoomInGrid(nextRoom, currentGridCursorPosition);
+            currentRoom = AttachRoom(currentRoom, nextRoom, freeSocket);
         }
 
-        // Exit-Room
-        var freeExitSocket = currentRoom.GetAvailableSocket();
-        currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeExitSocket.GetDirection());
-        SetRoomInGrid(_exit, currentGridCursorPosition);
-        var room = AttachRoom(currentRoom, _exit, freeExitSocket);
+        var freeExitSocket = currentRoom.GetAvailableRandomSocket(_random);
+
+        if (freeExitSocket != null)
+        {
+            currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeExitSocket.GetDirection());
+            SetRoomInGrid(_exit, currentGridCursorPosition);
+            AttachRoom(currentRoom, _exit, freeExitSocket);
+        }
     }
 
     private void SetRoomInGrid(Room currentRoom, Vector2 currentGridPosition)
