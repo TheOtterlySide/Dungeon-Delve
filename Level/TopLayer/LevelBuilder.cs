@@ -16,6 +16,7 @@ public partial class LevelBuilder : Node
     private List<Room> _roomPool = new();
     private Dictionary<(int x, int y), Room> grid = new();
     private Vector2 currentGridCursorPosition = new Vector2(0, 0);
+    private Direction lastUsedDirection;
 
     [Export] private PackedScene _startRoom;
     [Export] private PackedScene _exitRoom;
@@ -91,21 +92,23 @@ public partial class LevelBuilder : Node
     {
         var currentRoom = _start;
         SetRoomInGrid(currentRoom, currentGridCursorPosition);
-
+        
         while (_roomPool.Count > 0)
         {
             var nextRoom = _roomPool[0];
-            var freeSocket = currentRoom.GetAvailableRandomSocket(_random);
+            var freeSocket = currentRoom.GetAvailableRandomSocket(lastUsedDirection);
 
             if (freeSocket == null) break;
-
+            
+            lastUsedDirection = freeSocket.GetDirection();
+            
             if (IsGridOccupied(GetDirectionVector(freeSocket.SocketDirection)))
             {
                 freeSocket.Use();
                 continue;
             }
 
-            var oppositeSocket = nextRoom.GetAvailableSocketOppositeSite(nextRoom.roomSockets, freeSocket.GetDirection());
+            var oppositeSocket = nextRoom.GetAvailableSocketOppositeSite(nextRoom.RoomSockets, freeSocket.GetDirection());
             freeSocket.Use();
             oppositeSocket.Use();
             _roomPool.RemoveAt(0);
@@ -115,7 +118,7 @@ public partial class LevelBuilder : Node
             currentRoom = AttachRoom(currentRoom, nextRoom, freeSocket);
         }
 
-        var freeExitSocket = currentRoom.GetAvailableRandomSocket(_random);
+        var freeExitSocket = currentRoom.GetAvailableRandomSocket(lastUsedDirection);
 
         if (freeExitSocket != null)
         {

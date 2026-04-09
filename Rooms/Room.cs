@@ -1,42 +1,49 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using DungeonDelve.Level.Common;
+using DungeonDelve.Rooms.SPECIAL;
 
 public partial class Room : Node3D
 {
-    public int id { get; set; }
-    public int socketCount { get; set; }
-    public int usedSocketCount { get; set; }
-    public List<DungeonDelve.Rooms.SPECIAL.RoomSocket> roomSockets = new List<DungeonDelve.Rooms.SPECIAL.RoomSocket>();
+    public int Id { get; set; }
+    public int SocketCount { get; set; }
+    public int UsedSocketCount { get; set; }
+
+    public List<RoomSocket> RoomSockets = new List<RoomSocket>();
+    private float _probabilityToChangeDirection = 0.1f;
 
     public override void _Ready()
     {
-       GetNode("Sockets").GetChildren().ToList().ForEach(x => roomSockets.Add((DungeonDelve.Rooms.SPECIAL.RoomSocket)x));
-       socketCount = roomSockets.Count;
-       base._Ready();
+        GetNode("Sockets").GetChildren().ToList().ForEach(x => RoomSockets.Add((RoomSocket)x));
+        SocketCount = RoomSockets.Count;
+        base._Ready();
     }
-    
-    public DungeonDelve.Rooms.SPECIAL.RoomSocket GetAvailableSocket()
+
+    public RoomSocket GetAvailableSocket()
     {
-        var result = roomSockets.FirstOrDefault(x => !x.isUsed);
+        var result = RoomSockets.FirstOrDefault(x => !x.isUsed);
         return result;
     }
-    
-    public DungeonDelve.Rooms.SPECIAL.RoomSocket GetAvailableRandomSocket(Random random)
+
+    public RoomSocket GetAvailableRandomSocket(Direction lastDirection)
     {
-        var availableSockets = roomSockets.Where(x => !x.isUsed).ToList();
-        var result = random.Next(availableSockets.Count);
-        return availableSockets[result];
+        var availableSockets = RoomSockets.Where(x => !x.isUsed).ToList();
+        var weights = availableSockets.Select(x => x.GetDirection() == lastDirection ? _probabilityToChangeDirection : 1.0f).ToArray();
+        return availableSockets[(int)new RandomNumberGenerator().RandWeighted(weights)];
+    }
+
+    public List<RoomSocket> GetAvailableSockets()
+    {
+        return RoomSockets.Where(x => !x.isUsed).ToList();
     }
     
-    public List<DungeonDelve.Rooms.SPECIAL.RoomSocket> GetAvailableSocketList(List<DungeonDelve.Rooms.SPECIAL.RoomSocket> availableSockets)
+    public List<RoomSocket> GetAvailableSocketList(List<RoomSocket> availableSockets)
     {
-        return roomSockets;
+        return RoomSockets;
     }
-    
-    public DungeonDelve.Rooms.SPECIAL.RoomSocket GetAvailableSocketOppositeSite(List<DungeonDelve.Rooms.SPECIAL.RoomSocket> availableSockets, Direction dir)
+
+    public RoomSocket GetAvailableSocketOppositeSite(List<RoomSocket> availableSockets, Direction dir)
     {
         var result = availableSockets.FirstOrDefault(x => !x.isUsed && x.GetDirection() == x.GetOpposite(dir));
         return result;
