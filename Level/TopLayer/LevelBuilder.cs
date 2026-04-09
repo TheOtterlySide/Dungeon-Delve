@@ -110,7 +110,7 @@ public partial class LevelBuilder : Node
 
             var oppositeSocket = nextRoom.GetAvailableSocketOppositeSite(nextRoom.RoomSockets, freeSocket.GetDirection());
             freeSocket.Use();
-            oppositeSocket.Use();
+            if (oppositeSocket != null) oppositeSocket.Use();
             _roomPool.RemoveAt(0);
 
             currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeSocket.GetDirection());
@@ -120,11 +120,15 @@ public partial class LevelBuilder : Node
 
         var freeExitSocket = currentRoom.GetAvailableRandomSocket(lastUsedDirection);
 
-        if (freeExitSocket != null)
+        if (freeExitSocket != null && !IsGridOccupied(GetDirectionVector(freeExitSocket.SocketDirection)))
         {
-            currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeExitSocket.GetDirection());
-            SetRoomInGrid(_exit, currentGridCursorPosition);
-            AttachRoom(currentRoom, _exit, freeExitSocket);
+                currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeExitSocket.GetDirection());
+                SetRoomInGrid(_exit, currentGridCursorPosition);
+                AttachRoom(currentRoom, _exit, freeExitSocket);
+        }
+        else
+        {
+            //Find Next Free Slot in Room List I guess?
         }
     }
 

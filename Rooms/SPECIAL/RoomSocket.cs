@@ -16,7 +16,7 @@ public partial class RoomSocket : Marker3D
 
     public Direction GetDirection() => SocketDirection;
     
-    public Direction GetOpposite(Direction dir) => dir switch
+    public Direction GetOppositeDirection(Direction dir) => dir switch
     {
         Direction.North => Direction.South,
         Direction.South => Direction.North,

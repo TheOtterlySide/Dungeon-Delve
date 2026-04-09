@@ -45,7 +45,7 @@ public partial class Room : Node3D
 
     public RoomSocket GetAvailableSocketOppositeSite(List<RoomSocket> availableSockets, Direction dir)
     {
-        var result = availableSockets.FirstOrDefault(x => !x.isUsed && x.GetDirection() == x.GetOpposite(dir));
+        var result = availableSockets.FirstOrDefault(x => !x.isUsed && x.GetDirection() == x.GetOppositeDirection(dir));
         return result;
     }
 }
