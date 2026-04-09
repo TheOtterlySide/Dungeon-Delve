@@ -92,16 +92,16 @@ public partial class LevelBuilder : Node
     {
         var currentRoom = _start;
         SetRoomInGrid(currentRoom, currentGridCursorPosition);
-        
+
         while (_roomPool.Count > 0)
         {
             var nextRoom = _roomPool[0];
             var freeSocket = currentRoom.GetAvailableRandomSocket(lastUsedDirection);
 
             if (freeSocket == null) break;
-            
+
             lastUsedDirection = freeSocket.GetDirection();
-            
+
             if (IsGridOccupied(GetDirectionVector(freeSocket.SocketDirection)))
             {
                 freeSocket.Use();
@@ -140,13 +140,15 @@ public partial class LevelBuilder : Node
 
     private void GenerateRooms()
     {
-        var specialRoomCount = 0;
-        var bossRoomCount = 0;
+        var specialRoomCount = 2;
+        var bossRoomCount = 1;
 
         PrepareDefaultRooms();
 
         InstantiateRoomAndPlace(_roomScenesToInstantiate, Level);
         InstantiateRoomAndPlace(_specialRoomScenesToInstantiate, specialRoomCount);
+
+        _roomPool = _roomPool.OrderBy(x => new RandomNumberGenerator().Randf()).ToList();
         InstantiateRoomAndPlace(_bossRoomScenesToInstantiate, bossRoomCount);
     }
 
