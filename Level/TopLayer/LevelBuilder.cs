@@ -14,6 +14,7 @@ public partial class LevelBuilder : Node
     private Random _random = new();
     private bool _isFirstRun = true;
     private List<Room> _roomPool = new();
+    private List<Room> _roomWithOpenPort = new();
     private Dictionary<(int x, int y), Room> grid = new();
     private Vector2 currentGridCursorPosition = new Vector2(0, 0);
     private Direction lastUsedDirection;
@@ -26,7 +27,6 @@ public partial class LevelBuilder : Node
 
     [ExportGroup("Paths")]
     [Export] private string _roomPath;
-
     [Export] private string _specialRoomPath;
     [Export] private string _bossRoomPath;
 
@@ -52,6 +52,7 @@ public partial class LevelBuilder : Node
         GetRoomScene(bossLoader, _bossRoomPath, RoomType.boss);
 
         GenerateRooms();
+        
         AlignRooms();
     }
 
@@ -92,7 +93,8 @@ public partial class LevelBuilder : Node
     {
         var currentRoom = _start;
         SetRoomInGrid(currentRoom, currentGridCursorPosition);
-
+        _roomWithOpenPort.AddRange(_roomPool);
+        
         while (_roomPool.Count > 0)
         {
             var nextRoom = _roomPool[0];
@@ -118,18 +120,44 @@ public partial class LevelBuilder : Node
             currentRoom = AttachRoom(currentRoom, nextRoom, freeSocket);
         }
 
-        var freeExitSocket = currentRoom.GetAvailableRandomSocket(lastUsedDirection);
+        EndProcedure();
+    }
 
-        if (freeExitSocket != null && !IsGridOccupied(GetDirectionVector(freeExitSocket.SocketDirection)))
+    private void EndProcedure()
+    {
+        var freeExitRoom = GetRoomForEnd();
+        var socketList = freeExitRoom.GetAvailableSockets();
+        
+        foreach (var freeSocket in socketList)
         {
-                currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeExitSocket.GetDirection());
+            if (IsGridFreeForEndRoom(freeExitRoom, freeSocket))
+            {
                 SetRoomInGrid(_exit, currentGridCursorPosition);
-                AttachRoom(currentRoom, _exit, freeExitSocket);
+                AttachRoom(freeExitRoom, _exit, freeSocket);
+                break;
+            }
         }
-        else
+    }
+
+    private Room GetRoomForEnd()
+    {
+        var possibleRooms = _roomWithOpenPort.Where(x => x.GetAvailableSockets().Count > 0).ToList();
+        var roomIndex = _random.Next(0, possibleRooms.Count);
+        return possibleRooms[roomIndex];
+    }
+
+    private bool IsGridFreeForEndRoom(Room room, RoomSocket exitSocket)
+    {
+        var coords = GetGridCoordsForRoom(room);
+        
+        var newCoords = MoveInGrid(coords, exitSocket.SocketDirection);
+        if (!IsGridOccupied(new Vector3(newCoords.X, 0, newCoords.Y)))
         {
-            //Find Next Free Slot in Room List I guess?
+            currentGridCursorPosition = newCoords;
+            return true;
         }
+        
+        return false;
     }
 
     private void SetRoomInGrid(Room currentRoom, Vector2 currentGridPosition)
@@ -142,6 +170,15 @@ public partial class LevelBuilder : Node
         return grid.ContainsKey(((int)currentGridCursorPosition.X + (int)pos.X, (int)currentGridCursorPosition.Y + (int)pos.Z));
     }
 
+    private Vector2 GetGridCoordsForRoom(Room room)
+    {
+        var kvp = grid.FirstOrDefault(x => x.Value == room).Key.ToString();
+        var coords = kvp.Trim('(', ')').Split(",").Select(int.Parse).ToArray();
+        return new Vector2(coords[0], coords[1]);
+    }
+    
+    // private bool IsPlaceForRoom()
+
     private void GenerateRooms()
     {
         var specialRoomCount = 2;
@@ -151,9 +188,8 @@ public partial class LevelBuilder : Node
 
         InstantiateRoomAndPlace(_roomScenesToInstantiate, Level);
         InstantiateRoomAndPlace(_specialRoomScenesToInstantiate, specialRoomCount);
-
-        _roomPool = _roomPool.OrderBy(x => new RandomNumberGenerator().Randf()).ToList();
         InstantiateRoomAndPlace(_bossRoomScenesToInstantiate, bossRoomCount);
+        _roomPool = _roomPool.OrderBy(x => new RandomNumberGenerator().Randf()).ToList();
     }
 
     private void PrepareDefaultRooms()

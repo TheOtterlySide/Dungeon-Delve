@@ -38,7 +38,7 @@ public partial class Room : Node3D
         return RoomSockets.Where(x => !x.isUsed).ToList();
     }
     
-    public List<RoomSocket> GetAvailableSocketList(List<RoomSocket> availableSockets)
+    public List<RoomSocket> GetAvailableSocketList()
     {
         return RoomSockets;
     }
