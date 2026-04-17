@@ -18,7 +18,7 @@ albedo_texture = ExtResource("3_m516k")
 [sub_resource type="PlaneMesh" id="PlaneMesh_symuv"]
 size = Vector2(1, 1)
 
-[node name="Room01" type="Node3D" unique_id=1984975237]
+[node name="StartRoom" type="Node3D" unique_id=1984975237]
 script = ExtResource("1_4hdaj")
 
 [node name="Sockets" type="Node3D" parent="." unique_id=834100565]

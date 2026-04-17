@@ -29,6 +29,7 @@ public partial class Room : Node3D
     public RoomSocket GetAvailableRandomSocket(Direction lastDirection)
     {
         var availableSockets = RoomSockets.Where(x => !x.isUsed).ToList();
+        if (availableSockets.Count == 0) return null;
         var weights = availableSockets.Select(x => x.GetDirection() == lastDirection ? _probabilityToChangeDirection : 1.0f).ToArray();
         return availableSockets[(int)new RandomNumberGenerator().RandWeighted(weights)];
     }

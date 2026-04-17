@@ -7,244 +7,267 @@ using DungeonDelve.Rooms.SPECIAL;
 
 public partial class LevelBuilder : Node
 {
-    private List<PackedScene> _roomScenesToInstantiate = new();
-    private List<PackedScene> _specialRoomScenesToInstantiate = new();
-    private List<PackedScene> _bossRoomScenesToInstantiate = new();
-
-    private Random _random = new();
-    private bool _isFirstRun = true;
-    private List<Room> _roomPool = new();
-    private List<Room> _roomWithOpenPort = new();
-    private Dictionary<(int x, int y), Room> grid = new();
-    private Vector2 currentGridCursorPosition = new Vector2(0, 0);
-    private Direction lastUsedDirection;
+    // -------------------------------------------------------------------------
+    // Exports
+    // -------------------------------------------------------------------------
 
     [Export] private PackedScene _startRoom;
     [Export] private PackedScene _exitRoom;
-
-    private Room _start;
-    private Room _exit;
 
     [ExportGroup("Paths")]
     [Export] private string _roomPath;
     [Export] private string _specialRoomPath;
     [Export] private string _bossRoomPath;
 
-    public int Level { get; set; }
     [Export] private float _roomSpacing = 4f;
 
+    // -------------------------------------------------------------------------
+    // Config
+    // -------------------------------------------------------------------------
 
-    public LevelBuilder()
-    {
-        Level = 0;
-    }
+    private const int SpecialRoomCount = 2;
+    private const int BossRoomCount    = 1;
 
+    // -------------------------------------------------------------------------
+    // State
+    // -------------------------------------------------------------------------
+
+    private readonly Random _random = new();
+
+    private List<PackedScene> _normalRoomScenes  = new();
+    private List<PackedScene> _specialRoomScenes = new();
+    private List<PackedScene> _bossRoomScenes    = new();
+
+    /// <summary>Rooms waiting to be placed on the grid.</summary>
+    private List<Room> _roomPool = new();
+
+    /// <summary>All rooms that have at least one socket (used when placing the exit).</summary>
+    private List<Room> _roomsWithOpenPort = new();
+
+    /// <summary>Sparse grid: (column, row) → Room.</summary>
+    private readonly Dictionary<(int x, int y), Room> _grid = new();
+
+    private Room _startRoomInstance;
+    private Room _exitRoomInstance;
+
+    public int Level { get; set; } = 0;
+
+    // -------------------------------------------------------------------------
+    // Public API
+    // -------------------------------------------------------------------------
 
     public void Initial()
     {
-        var normalRoamLoader = ResourceLoader.ListDirectory(_roomPath);
-        var speciaLoader = ResourceLoader.ListDirectory(_specialRoomPath);
-        var bossLoader = ResourceLoader.ListDirectory(_bossRoomPath);
-
-
-        GetRoomScene(normalRoamLoader, _roomPath, RoomType.normal);
-        GetRoomScene(speciaLoader, _specialRoomPath, RoomType.special);
-        GetRoomScene(bossLoader, _bossRoomPath, RoomType.boss);
-
-        GenerateRooms();
-        
-        AlignRooms();
+        LoadRoomScenes();
+        InstantiateRooms();
+        PlaceRoomsOnGrid();
     }
 
-    private void GetRoomScene(string[] roomLoader, string path, RoomType type)
+    // -------------------------------------------------------------------------
+    // Loading
+    // -------------------------------------------------------------------------
+
+    private void LoadRoomScenes()
     {
-        var toAddList = new List<PackedScene>();
+        LoadScenesFromDirectory(_roomPath,        RoomType.normal,  _normalRoomScenes);
+        LoadScenesFromDirectory(_specialRoomPath, RoomType.special, _specialRoomScenes);
+        LoadScenesFromDirectory(_bossRoomPath,    RoomType.boss,    _bossRoomScenes);
+    }
 
-        switch (type)
+    private static void LoadScenesFromDirectory(string path, RoomType _, List<PackedScene> target)
+    {
+        foreach (var file in ResourceLoader.ListDirectory(path))
         {
-            case RoomType.normal:
-                toAddList = _roomScenesToInstantiate;
-                break;
-            case RoomType.special:
-                toAddList = _specialRoomScenesToInstantiate;
-                break;
-            case RoomType.boss:
-                toAddList = _bossRoomScenesToInstantiate;
-                break;
-            default:
-                break;
-        }
-
-        if (roomLoader.Length > 0)
-        {
-            foreach (var entity in roomLoader)
-            {
-                if (entity.Contains(".tscn"))
-                {
-                    var room = GD.Load<PackedScene>(path + entity);
-                    toAddList.Add(room);
-                }
-            }
+            if (file.EndsWith(".tscn"))
+                target.Add(GD.Load<PackedScene>(path + file));
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Instantiation
+    // -------------------------------------------------------------------------
 
-    private void AlignRooms()
+    private void InstantiateRooms()
     {
-        var currentRoom = _start;
-        SetRoomInGrid(currentRoom, currentGridCursorPosition);
-        _roomWithOpenPort.AddRange(_roomPool);
-        
+        _startRoomInstance = InstantiateAndAdd(_startRoom);
+        _exitRoomInstance  = InstantiateAndAdd(_exitRoom);
+
+        SpawnRandomRooms(_normalRoomScenes,  Level);
+        SpawnRandomRooms(_specialRoomScenes, SpecialRoomCount);
+        SpawnRandomRooms(_bossRoomScenes,    BossRoomCount);
+
+        // Shuffle the pool with a single shared Random instance
+        _roomPool = _roomPool.OrderBy(_ => _random.Next()).ToList();
+    }
+
+    private Room InstantiateAndAdd(PackedScene scene)
+    {
+        var room = (Room)scene.Instantiate();
+        AddChild(room);
+        return room;
+    }
+
+    private void SpawnRandomRooms(List<PackedScene> scenes, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            var scene = scenes[_random.Next(scenes.Count)];
+            _roomPool.Add(InstantiateAndAdd(scene));
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Grid placement
+    // -------------------------------------------------------------------------
+
+    private void PlaceRoomsOnGrid()
+    {
+        var cursor    = new Vector2I(0, 0);
+        var lastDir   = default(Direction);
+        var current   = _startRoomInstance;
+
+        PlaceInGrid(current, cursor);
+        _roomsWithOpenPort.AddRange(_roomPool);
+
         while (_roomPool.Count > 0)
         {
-            var nextRoom = _roomPool[0];
-            var freeSocket = currentRoom.GetAvailableRandomSocket(lastUsedDirection);
+            var next       = _roomPool[0];
+            var freeSocket = current.GetAvailableRandomSocket(lastDir);
 
             if (freeSocket == null) break;
 
-            lastUsedDirection = freeSocket.GetDirection();
+            lastDir = freeSocket.GetDirection();
 
-            if (IsGridOccupied(GetDirectionVector(freeSocket.SocketDirection)))
+            var newCursor = MoveInGrid(cursor, lastDir);
+
+            if (IsGridOccupied(newCursor))
             {
                 freeSocket.Use();
                 continue;
             }
 
-            var oppositeSocket = nextRoom.GetAvailableSocketOppositeSite(nextRoom.RoomSockets, freeSocket.GetDirection());
+            var oppositeSocket = next.GetAvailableSocketOppositeSite(next.RoomSockets, lastDir);
             freeSocket.Use();
-            if (oppositeSocket != null) oppositeSocket.Use();
+            oppositeSocket?.Use();
+
+            cursor = newCursor;
+            PlaceInGrid(next, cursor);
             _roomPool.RemoveAt(0);
 
-            currentGridCursorPosition = MoveInGrid(currentGridCursorPosition, freeSocket.GetDirection());
-            SetRoomInGrid(nextRoom, currentGridCursorPosition);
-            currentRoom = AttachRoom(currentRoom, nextRoom, freeSocket);
+            current = AttachRoom(current, next, freeSocket);
         }
 
-        EndProcedure();
+        LogUnplacedRooms();
+        PlaceExitRoom();
+        PrintGridDebug();
     }
 
-    private void EndProcedure()
+    private void PlaceExitRoom()
     {
-        var freeExitRoom = GetRoomForEnd();
-        var socketList = freeExitRoom.GetAvailableSockets();
-        
-        foreach (var freeSocket in socketList)
+        var anchor = PickRoomForExit();
+        if (anchor == null)
         {
-            if (IsGridFreeForEndRoom(freeExitRoom, freeSocket))
-            {
-                SetRoomInGrid(_exit, currentGridCursorPosition);
-                AttachRoom(freeExitRoom, _exit, freeSocket);
-                break;
-            }
+            GD.PrintErr("LevelBuilder: No room available to attach the exit.");
+            return;
         }
-    }
 
-    private Room GetRoomForEnd()
-    {
-        var possibleRooms = _roomWithOpenPort.Where(x => x.GetAvailableSockets().Count > 0).ToList();
-        var roomIndex = _random.Next(0, possibleRooms.Count);
-        return possibleRooms[roomIndex];
-    }
-
-    private bool IsGridFreeForEndRoom(Room room, RoomSocket exitSocket)
-    {
-        var coords = GetGridCoordsForRoom(room);
-        
-        var newCoords = MoveInGrid(coords, exitSocket.SocketDirection);
-        if (!IsGridOccupied(new Vector3(newCoords.X, 0, newCoords.Y)))
+        foreach (var socket in anchor.GetAvailableSockets())
         {
-            currentGridCursorPosition = newCoords;
-            return true;
+            var candidate = MoveInGrid(GetGridCoords(anchor), socket.SocketDirection);
+
+            if (IsGridOccupied(candidate)) continue;
+
+            PlaceInGrid(_exitRoomInstance, candidate);
+            AttachRoom(anchor, _exitRoomInstance, socket);
+            return;
         }
-        
-        return false;
+
+        GD.PrintErr("LevelBuilder: Could not find a free slot for the exit room.");
     }
 
-    private void SetRoomInGrid(Room currentRoom, Vector2 currentGridPosition)
+    // -------------------------------------------------------------------------
+    // Grid helpers
+    // -------------------------------------------------------------------------
+
+    private void PlaceInGrid(Room room, Vector2I pos) =>
+        _grid[(pos.X, pos.Y)] = room;
+
+    private bool IsGridOccupied(Vector2I pos) =>
+        _grid.ContainsKey((pos.X, pos.Y));
+
+    private Vector2I GetGridCoords(Room room)
     {
-        grid[((int)currentGridPosition.X, (int)currentGridPosition.Y)] = currentRoom;
-    }
-
-    private bool IsGridOccupied(Vector3 pos)
-    {
-        return grid.ContainsKey(((int)currentGridCursorPosition.X + (int)pos.X, (int)currentGridCursorPosition.Y + (int)pos.Z));
-    }
-
-    private Vector2 GetGridCoordsForRoom(Room room)
-    {
-        var kvp = grid.FirstOrDefault(x => x.Value == room).Key.ToString();
-        var coords = kvp.Trim('(', ')').Split(",").Select(int.Parse).ToArray();
-        return new Vector2(coords[0], coords[1]);
-    }
-    
-    // private bool IsPlaceForRoom()
-
-    private void GenerateRooms()
-    {
-        var specialRoomCount = 2;
-        var bossRoomCount = 1;
-
-        PrepareDefaultRooms();
-
-        InstantiateRoomAndPlace(_roomScenesToInstantiate, Level);
-        InstantiateRoomAndPlace(_specialRoomScenesToInstantiate, specialRoomCount);
-        InstantiateRoomAndPlace(_bossRoomScenesToInstantiate, bossRoomCount);
-        _roomPool = _roomPool.OrderBy(x => new RandomNumberGenerator().Randf()).ToList();
-    }
-
-    private void PrepareDefaultRooms()
-    {
-        var instance = (Room)_startRoom.Instantiate();
-        _start = instance;
-        AddChild(instance);
-
-        var endRoom = (Room)_exitRoom.Instantiate();
-        _exit = endRoom;
-        AddChild(endRoom);
-    }
-
-    private void InstantiateRoomAndPlace(List<PackedScene> scenesToInstantiate, int maxCount)
-    {
-        for (int i = 0; i < maxCount; i++)
+        foreach (var kvp in _grid)
         {
-            var sceneToInstantiate = scenesToInstantiate[_random.Next(0, scenesToInstantiate.Count)];
-            var instance = (Room)sceneToInstantiate.Instantiate();
-
-            AddChild(instance);
-            _roomPool.Add(instance);
+            if (kvp.Value == room)
+                return new Vector2I(kvp.Key.x, kvp.Key.y);
         }
+        throw new InvalidOperationException($"Room '{room.Name}' is not registered in the grid.");
     }
 
     private Room GetRoomAt(int x, int y)
     {
-        grid.TryGetValue((x, y), out var room);
+        _grid.TryGetValue((x, y), out var room);
         return room;
     }
 
-    private Vector2 MoveInGrid(Vector2 currentPosition, Direction dir)
+    private static Vector2I MoveInGrid(Vector2I pos, Direction dir) => dir switch
     {
-        return dir switch
-        {
-            Direction.North => new Vector2(currentPosition.X, currentPosition.Y - 1),
-            Direction.South => new Vector2(currentPosition.X, currentPosition.Y + 1),
-            Direction.East => new Vector2(currentPosition.X + 1, currentPosition.Y),
-            Direction.West => new Vector2(currentPosition.X - 1, currentPosition.Y),
-            _ => currentPosition
-        };
-    }
+        Direction.North => new Vector2I(pos.X,     pos.Y - 1),
+        Direction.South => new Vector2I(pos.X,     pos.Y + 1),
+        Direction.East  => new Vector2I(pos.X + 1, pos.Y),
+        Direction.West  => new Vector2I(pos.X - 1, pos.Y),
+        _               => pos
+    };
 
-    Room AttachRoom(Room startRoom, Room newRoom, RoomSocket socket)
+    // -------------------------------------------------------------------------
+    // Room attachment
+    // -------------------------------------------------------------------------
+
+    private Room AttachRoom(Room origin, Room newRoom, RoomSocket socket)
     {
-        newRoom.GlobalPosition = startRoom.GlobalPosition + _roomSpacing * GetDirectionVector(socket.SocketDirection);
+        newRoom.GlobalPosition = origin.GlobalPosition + _roomSpacing * GetDirectionVector(socket.SocketDirection);
         return newRoom;
     }
 
-    Vector3 GetDirectionVector(Direction dir) => dir switch
+    private static Vector3 GetDirectionVector(Direction dir) => dir switch
     {
-        Direction.North => Vector3.Forward, // (0, 0, 1)
-        Direction.South => Vector3.Back, // (0, 0,  -1)
-        Direction.East => Vector3.Right, // (1, 0,  0)
-        Direction.West => Vector3.Left, // (-1, 0, 0)
-        _ => Vector3.Zero
+        Direction.North => Vector3.Forward,
+        Direction.South => Vector3.Back,
+        Direction.East  => Vector3.Right,
+        Direction.West  => Vector3.Left,
+        _               => Vector3.Zero
     };
+
+    // -------------------------------------------------------------------------
+    // Exit room selection
+    // -------------------------------------------------------------------------
+
+    private Room PickRoomForExit()
+    {
+        var candidates = _roomsWithOpenPort
+            .Where(r => r.GetAvailableSockets().Count > 0)
+            .ToList();
+
+        return candidates.Count > 0
+            ? candidates[_random.Next(candidates.Count)]
+            : null;
+    }
+
+    // -------------------------------------------------------------------------
+    // Debug
+    // -------------------------------------------------------------------------
+
+    private void LogUnplacedRooms()
+    {
+        GD.Print("LevelBuilder: Rooms remaining in pool after placement: ", _roomPool.Count);
+        foreach (var r in _roomPool)
+            GD.PrintErr("LevelBuilder: Room never placed – ", r.Name);
+    }
+
+    private void PrintGridDebug()
+    {
+        foreach (var entry in _grid)
+            GD.Print(entry.Key, " : ", entry.Value.Name);
+    }
 }

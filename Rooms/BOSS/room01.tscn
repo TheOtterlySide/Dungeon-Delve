@@ -18,7 +18,7 @@ albedo_texture = ExtResource("1_7lju3")
 [sub_resource type="PlaneMesh" id="PlaneMesh_b8058"]
 size = Vector2(1, 1)
 
-[node name="Room01" type="Node3D" unique_id=200813247]
+[node name="BossRoom" type="Node3D" unique_id=200813247]
 script = ExtResource("1_38md8")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1565282412]
