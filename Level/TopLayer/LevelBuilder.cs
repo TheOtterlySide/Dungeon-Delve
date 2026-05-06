@@ -19,8 +19,6 @@ public partial class LevelBuilder : Node
     [Export] private string _specialRoomPath;
     [Export] private string _bossRoomPath;
 
-    [Export] private float _roomSpacing = 4f;
-
     // -------------------------------------------------------------------------
     // Config
     // -------------------------------------------------------------------------
@@ -131,6 +129,7 @@ public partial class LevelBuilder : Node
 
         while (_roomPool.Count > 0)
         {
+            current.GetSizeOfRoom();
             var next       = _roomPool[0];
             var freeSocket = current.GetAvailableRandomSocket(lastDir);
 
@@ -226,7 +225,7 @@ public partial class LevelBuilder : Node
 
     private Room AttachRoom(Room origin, Room newRoom, RoomSocket socket)
     {
-        newRoom.GlobalPosition = origin.GlobalPosition + _roomSpacing * GetDirectionVector(socket.SocketDirection);
+        newRoom.GlobalPosition = origin.GlobalPosition + origin.GetSizeOfRoom() * GetDirectionVector(socket.SocketDirection);
         return newRoom;
     }
 

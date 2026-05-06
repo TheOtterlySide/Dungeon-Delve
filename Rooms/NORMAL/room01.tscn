@@ -48,11 +48,10 @@ SocketDirection = 3
 physics_material_override = SubResource("PhysicsMaterial_782l8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=115749531]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014770508, 0, 0)
 shape = SubResource("BoxShape3D_014kx")
 
 [node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D" unique_id=15607528]
-transform = Transform3D(2.0491152, 0, 0, 0, 1, 0, 0, 0, 2.0151305, 0, 0, 0)
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")

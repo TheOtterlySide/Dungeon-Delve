@@ -49,4 +49,16 @@ public partial class Room : Node3D
         var result = availableSockets.FirstOrDefault(x => !x.isUsed && x.GetDirection() == x.GetOppositeDirection(dir));
         return result;
     }
+
+    public float GetSizeOfRoom()
+    {
+        if (GetNode("StaticBody3D").GetChildren().FirstOrDefault(x => x is CollisionShape3D) is CollisionShape3D collisionNode)
+        {
+            var shape = collisionNode.GetShape() as BoxShape3D;
+            GD.Print(shape.Size + "Room: " + Name);
+            return shape.Size.X;
+        }
+
+        return 0f;
+    }
 }

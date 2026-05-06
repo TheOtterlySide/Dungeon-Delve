@@ -7,7 +7,7 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_782l8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_014kx"]
-size = Vector3(1.9298096, 0.1, 1.9629059)
+size = Vector3(4, 0.1, 4)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1bfu"]
 albedo_color = Color(0, 0.99723125, 2.072806, 1)
@@ -50,13 +50,13 @@ script = ExtResource("1_vrssw")
 SocketDirection = 2
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1115786968]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 physics_material_override = SubResource("PhysicsMaterial_782l8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=708874861]
 shape = SubResource("BoxShape3D_014kx")
 
 [node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D" unique_id=1519481061]
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
