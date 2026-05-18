@@ -129,7 +129,6 @@ public partial class LevelBuilder : Node
 
         while (_roomPool.Count > 0)
         {
-            current.GetSizeOfRoom();
             var next       = _roomPool[0];
             var freeSocket = current.GetAvailableRandomSocket(lastDir);
 
