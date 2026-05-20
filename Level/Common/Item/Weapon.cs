@@ -1,15 +1,20 @@
 
 using DungeonDelve.Level.Common;
+using DungeonDelve.Level.Common.Enum;
+using Godot;
 
-public class Weapon : Item
+public partial class Weapon : Item
 {
+    [ExportGroup("Weapon Part")] 
+    [Export]
     public int Damage { get; set; }
+    [Export]
     public int Durability { get; set; }
+    
+    [Export]
+    public WeaponTypeEnum WeaponType { get; set; }
 
-    public Weapon(string name, int damage, int durability)
+    public Weapon()
     {
-        Name = name;
-        Damage = damage;
-        Durability = durability;
     }
 }

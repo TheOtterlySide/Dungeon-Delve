@@ -1,18 +1,21 @@
 using DungeonDelve.Level.Common;
+using Godot;
 
-public class Potion : Item
+public partial class Potion : Item
 {
-        public int HealthRestore { get; set; }
-        public int ManaRestore { get; set; }
-        public int Duration { get; set; }
-        public bool IsPoisonous { get; set; }
-    
-        public Potion(string name, int healthRestore, int manaRestore, int duration, bool isPoisonous)
-        {
-            Name = name;
-            HealthRestore = healthRestore;
-            ManaRestore = manaRestore;
-            Duration = duration;
-            IsPoisonous = isPoisonous;
-        }
+    [ExportGroup("Potion Part")]
+    [Export]
+    public int HealthRestore { get; set; }
+
+    [Export]
+    public int ManaRestore { get; set; }
+
+    [Export]
+    public int Duration { get; set; }
+
+    [Export]
+    public bool IsPoisonous { get; set; }
+    public Potion()
+    {
+    }
 }
