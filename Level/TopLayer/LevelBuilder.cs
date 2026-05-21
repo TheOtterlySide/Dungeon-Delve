@@ -84,7 +84,7 @@ public partial class LevelBuilder : Node
                 var result = resultChildren.FirstOrDefault(x => x.Name.ToString().Contains(direction.ToString()));
                 if  (result != null)
                 {
-                    //(Node3d)result.Visible = true;
+                    ((Node3D)result).Visible = true;
                 }
             }
         }
@@ -154,7 +154,7 @@ public partial class LevelBuilder : Node
         var current   = _startRoomInstance;
 
         PlaceInGrid(current, cursor);
-        _allRooms.AddRange(_roomPool);
+        _allRooms.Add(_startRoomInstance);
         _allRooms.AddRange(_roomPool);
 
         while (_roomPool.Count > 0)
@@ -177,8 +177,11 @@ public partial class LevelBuilder : Node
             var oppositeSocket = next.GetAvailableSocketOppositeSite(next.RoomSockets, lastDir);
             freeSocket.Use();
             current.UsedSockets.Add(freeSocket);
-            oppositeSocket?.Use();
-            next.UsedSockets.Add(oppositeSocket);
+            if (oppositeSocket != null)       
+            {
+                oppositeSocket.Use();
+                next.UsedSockets.Add(oppositeSocket);
+            }
 
             cursor = newCursor;
             PlaceInGrid(next, cursor);
@@ -189,6 +192,7 @@ public partial class LevelBuilder : Node
 
         LogUnplacedRooms();
         PlaceExitRoom();
+        _allRooms.Add(_exitRoomInstance);         
         PrintGridDebug();
     }
 
