@@ -8,13 +8,15 @@ public partial class Room : Node3D
 {
     public int Id { get; set; }
     public int SocketCount { get; set; }
-    public int UsedSocketCount { get; set; }
+    public List<RoomSocket> UsedSockets { get; set; }
 
-    public List<RoomSocket> RoomSockets = new List<RoomSocket>();
+    public List<RoomSocket> RoomSockets { get; set; }
     private float _probabilityToChangeDirection = 0.1f;
 
     public override void _Ready()
     {
+        RoomSockets = new List<RoomSocket>();
+        UsedSockets = new List<RoomSocket>();
         GetNode("Sockets").GetChildren().ToList().ForEach(x => RoomSockets.Add((RoomSocket)x));
         SocketCount = RoomSockets.Count;
         base._Ready();

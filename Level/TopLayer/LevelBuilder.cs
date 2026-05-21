@@ -40,7 +40,7 @@ public partial class LevelBuilder : Node
     private List<Room> _roomPool = new();
 
     /// <summary>All rooms that have at least one socket (used when placing the exit).</summary>
-    private List<Room> _roomsWithOpenPort = new();
+    private List<Room> _allRooms = new();
 
     /// <summary>Sparse grid: (column, row) → Room.</summary>
     private readonly Dictionary<(int x, int y), Room> _grid = new();
@@ -59,6 +59,35 @@ public partial class LevelBuilder : Node
         LoadRoomScenes();
         InstantiateRooms();
         PlaceRoomsOnGrid();
+        PlaceWallsAndDoors();
+    }
+
+    private void PlaceWallsAndDoors()
+    {
+        foreach (var room in _allRooms)
+        {
+            var wallNode = room.GetNode("Walls");
+            var doorNode = room.GetNode("Doors");
+            var usedEnums = new List<Direction>();
+
+            var used = room.UsedSockets;
+            foreach (var socket in used)
+            {
+                if (socket == null) continue;
+                var direction  = socket.GetDirection();
+                usedEnums.Add(direction);
+            }
+
+            foreach (var direction in usedEnums)
+            {
+                var resultChildren = doorNode.GetChildren();
+                var result = resultChildren.FirstOrDefault(x => x.Name.ToString().Contains(direction.ToString()));
+                if  (result != null)
+                {
+                    //(Node3d)result.Visible = true;
+                }
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -125,7 +154,8 @@ public partial class LevelBuilder : Node
         var current   = _startRoomInstance;
 
         PlaceInGrid(current, cursor);
-        _roomsWithOpenPort.AddRange(_roomPool);
+        _allRooms.AddRange(_roomPool);
+        _allRooms.AddRange(_roomPool);
 
         while (_roomPool.Count > 0)
         {
@@ -146,7 +176,9 @@ public partial class LevelBuilder : Node
 
             var oppositeSocket = next.GetAvailableSocketOppositeSite(next.RoomSockets, lastDir);
             freeSocket.Use();
+            current.UsedSockets.Add(freeSocket);
             oppositeSocket?.Use();
+            next.UsedSockets.Add(oppositeSocket);
 
             cursor = newCursor;
             PlaceInGrid(next, cursor);
@@ -243,7 +275,7 @@ public partial class LevelBuilder : Node
 
     private Room PickRoomForExit()
     {
-        var candidates = _roomsWithOpenPort
+        var candidates = _allRooms
             .Where(r => r.GetAvailableSockets().Count > 0)
             .ToList();
 

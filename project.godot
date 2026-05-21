@@ -30,6 +30,8 @@ project/assembly_name="Dungeon Delve"
 [global_group]
 
 SOCKET="Group for Exit nodes"
+Doors="Door"
+Walls="Wall"
 
 [input]
 
