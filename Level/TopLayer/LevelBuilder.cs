@@ -36,13 +36,9 @@ public partial class LevelBuilder : Node
     private List<PackedScene> _specialRoomScenes = new();
     private List<PackedScene> _bossRoomScenes    = new();
 
-    /// <summary>Rooms waiting to be placed on the grid.</summary>
     private List<Room> _roomPool = new();
-
-    /// <summary>All rooms that have at least one socket (used when placing the exit).</summary>
     private List<Room> _allRooms = new();
 
-    /// <summary>Sparse grid: (column, row) → Room.</summary>
     private readonly Dictionary<(int x, int y), Room> _grid = new();
 
     private Room _startRoomInstance;
@@ -62,30 +58,45 @@ public partial class LevelBuilder : Node
         PlaceWallsAndDoors();
     }
 
+    // -------------------------------------------------------------------------
+    // Walls & Doors
+    // -------------------------------------------------------------------------
+
     private void PlaceWallsAndDoors()
     {
         foreach (var room in _allRooms)
         {
-            var wallNode = room.GetNode("Walls");
+            GD.Print($"=== Room: {room.Name} | Connected: {string.Join(", ", room.ConnectedDirections)} ===");
+
             var doorNode = room.GetNode("Doors");
-            var usedEnums = new List<Direction>();
+            var wallNode = room.GetNode("Walls");
 
-            var used = room.UsedSockets;
-            foreach (var socket in used)
-            {
-                if (socket == null) continue;
-                var direction  = socket.GetDirection();
-                usedEnums.Add(direction);
-            }
+            GD.Print("Door children: ", string.Join(", ", doorNode.GetChildren().Select(x => x.Name)));
+            GD.Print("Wall children: ", string.Join(", ", wallNode.GetChildren().Select(x => x.Name)));
 
-            foreach (var direction in usedEnums)
+            foreach (Direction dir in Enum.GetValues<Direction>())
             {
-                var resultChildren = doorNode.GetChildren();
-                var result = resultChildren.FirstOrDefault(x => x.Name.ToString().Contains(direction.ToString()));
-                if  (result != null)
-                {
-                    ((Node3D)result).Visible = true;
-                }
+                bool connected = room.ConnectedDirections.Contains(dir);
+                var target     = connected ? doorNode : wallNode;
+
+                var child = target.GetChildren()
+                    .FirstOrDefault(x => x.Name.ToString() == dir.ToString()) as Node3D;
+
+                GD.Print($"Dir: {dir} | Connected: {connected} | Found: {child?.Name ?? "NULL"}");
+
+                if (child == null) continue;
+
+                child.Visible = true;
+
+// Name könnte anders sein, erstmal alle Kinder ausgeben:
+                foreach (var c in child.GetChildren())
+                    GD.Print("  child of North: ", c.Name, " | Type: ", c.GetType().Name);
+
+                var collision = child.GetNodeOrNull<CollisionShape3D>("CollisionShape3D");
+                if (collision != null)
+                    collision.Disabled = false;
+                else
+                    GD.PrintErr("CollisionShape3D nicht gefunden unter: ", child.Name);
             }
         }
     }
@@ -96,12 +107,12 @@ public partial class LevelBuilder : Node
 
     private void LoadRoomScenes()
     {
-        LoadScenesFromDirectory(_roomPath,        RoomType.normal,  _normalRoomScenes);
-        LoadScenesFromDirectory(_specialRoomPath, RoomType.special, _specialRoomScenes);
-        LoadScenesFromDirectory(_bossRoomPath,    RoomType.boss,    _bossRoomScenes);
+        LoadScenesFromDirectory(_roomPath,        _normalRoomScenes);
+        LoadScenesFromDirectory(_specialRoomPath, _specialRoomScenes);
+        LoadScenesFromDirectory(_bossRoomPath,    _bossRoomScenes);
     }
 
-    private static void LoadScenesFromDirectory(string path, RoomType _, List<PackedScene> target)
+    private static void LoadScenesFromDirectory(string path, List<PackedScene> target)
     {
         foreach (var file in ResourceLoader.ListDirectory(path))
         {
@@ -123,7 +134,6 @@ public partial class LevelBuilder : Node
         SpawnRandomRooms(_specialRoomScenes, SpecialRoomCount);
         SpawnRandomRooms(_bossRoomScenes,    BossRoomCount);
 
-        // Shuffle the pool with a single shared Random instance
         _roomPool = _roomPool.OrderBy(_ => _random.Next()).ToList();
     }
 
@@ -149,9 +159,9 @@ public partial class LevelBuilder : Node
 
     private void PlaceRoomsOnGrid()
     {
-        var cursor    = new Vector2I(0, 0);
-        var lastDir   = default(Direction);
-        var current   = _startRoomInstance;
+        var cursor  = new Vector2I(0, 0);
+        var lastDir = default(Direction);
+        var current = _startRoomInstance;
 
         PlaceInGrid(current, cursor);
         _allRooms.Add(_startRoomInstance);
@@ -176,11 +186,12 @@ public partial class LevelBuilder : Node
 
             var oppositeSocket = next.GetAvailableSocketOppositeSite(next.RoomSockets, lastDir);
             freeSocket.Use();
-            current.UsedSockets.Add(freeSocket);
-            if (oppositeSocket != null)       
+            current.ConnectedDirections.Add(lastDir);
+
+            if (oppositeSocket != null)
             {
                 oppositeSocket.Use();
-                next.UsedSockets.Add(oppositeSocket);
+                next.ConnectedDirections.Add(Opposite(lastDir));
             }
 
             cursor = newCursor;
@@ -192,7 +203,7 @@ public partial class LevelBuilder : Node
 
         LogUnplacedRooms();
         PlaceExitRoom();
-        _allRooms.Add(_exitRoomInstance);         
+        _allRooms.Add(_exitRoomInstance);
         PrintGridDebug();
     }
 
@@ -208,8 +219,10 @@ public partial class LevelBuilder : Node
         foreach (var socket in anchor.GetAvailableSockets())
         {
             var candidate = MoveInGrid(GetGridCoords(anchor), socket.SocketDirection);
-
             if (IsGridOccupied(candidate)) continue;
+
+            anchor.ConnectedDirections.Add(socket.SocketDirection);
+            _exitRoomInstance.ConnectedDirections.Add(Opposite(socket.SocketDirection));
 
             PlaceInGrid(_exitRoomInstance, candidate);
             AttachRoom(anchor, _exitRoomInstance, socket);
@@ -232,17 +245,10 @@ public partial class LevelBuilder : Node
     private Vector2I GetGridCoords(Room room)
     {
         foreach (var kvp in _grid)
-        {
             if (kvp.Value == room)
                 return new Vector2I(kvp.Key.x, kvp.Key.y);
-        }
-        throw new InvalidOperationException($"Room '{room.Name}' is not registered in the grid.");
-    }
 
-    private Room GetRoomAt(int x, int y)
-    {
-        _grid.TryGetValue((x, y), out var room);
-        return room;
+        throw new InvalidOperationException($"Room '{room.Name}' is not registered in the grid.");
     }
 
     private static Vector2I MoveInGrid(Vector2I pos, Direction dir) => dir switch
@@ -254,13 +260,23 @@ public partial class LevelBuilder : Node
         _               => pos
     };
 
+    private static Direction Opposite(Direction dir) => dir switch
+    {
+        Direction.North => Direction.South,
+        Direction.South => Direction.North,
+        Direction.East  => Direction.West,
+        Direction.West  => Direction.East,
+        _               => dir
+    };
+
     // -------------------------------------------------------------------------
     // Room attachment
     // -------------------------------------------------------------------------
 
     private Room AttachRoom(Room origin, Room newRoom, RoomSocket socket)
     {
-        newRoom.GlobalPosition = origin.GlobalPosition + origin.GetSizeOfRoom() * GetDirectionVector(socket.SocketDirection);
+        newRoom.GlobalPosition = origin.GlobalPosition + 
+            origin.GetSizeOfRoom() * GetDirectionVector(socket.SocketDirection);
         return newRoom;
     }
 
@@ -294,7 +310,7 @@ public partial class LevelBuilder : Node
 
     private void LogUnplacedRooms()
     {
-        GD.Print("LevelBuilder: Rooms remaining in pool after placement: ", _roomPool.Count);
+        GD.Print("LevelBuilder: Rooms remaining in pool: ", _roomPool.Count);
         foreach (var r in _roomPool)
             GD.PrintErr("LevelBuilder: Room never placed – ", r.Name);
     }
