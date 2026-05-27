@@ -251,3 +251,8 @@ mesh = SubResource("PlaneMesh_lnf7o")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1037087294]
 transform = Transform3D(0.9999799, 0, -0.006335503, 0, 1, 0, 0.006335503, 0, 0.9999799, 1.5, 0.1, 0)
 mesh = SubResource("PlaneMesh_62f1h")
+
+[node name="Debug Name" type="Label3D" parent="." unique_id=2031349554]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.004991293, 0)
+pixel_size = 0.025
+text = "test"
