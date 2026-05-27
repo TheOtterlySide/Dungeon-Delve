@@ -53,6 +53,7 @@ public partial class LevelBuilder : Node
 
     public void Initial()
     {
+        GD.Print("North: Blue, South: Green, East: Red, West: Yellow");
         LoadRoomScenes();
         InstantiateRooms();
         PlaceRoomsOnGrid();

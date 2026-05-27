@@ -18,14 +18,29 @@ albedo_texture = ExtResource("1_7lju3")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_b8058"]
-size = Vector2(1, 1)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_nhrdr"]
 size = Vector3(2.0371552, 0.088378906, 0.20358276)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xs5lb"]
 size = Vector3(3.592877, 3.17, 0.298)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ycrx0"]
+albedo_color = Color(1, 0.8713858, 0.37129125, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dfpbj"]
+size = Vector2(1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_73ndn"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nhrdr"]
+albedo_color = Color(0.24807912, 0.35388368, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xs5lb"]
+albedo_color = Color(0.94758934, 0.11836553, 0.4140708, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_d078o"]
+size = Vector2(1, 1)
 
 [node name="BossRoom" type="Node3D" unique_id=200813247]
 script = ExtResource("1_38md8")
@@ -53,16 +68,6 @@ script = ExtResource("1_b8058")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 script = ExtResource("1_b8058")
 SocketDirection = 2
-
-[node name="Node3D" type="Node3D" parent="." unique_id=1753830072]
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=810077843]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.5)
-mesh = SubResource("PlaneMesh_b8058")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=121736746]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 1.5)
-mesh = SubResource("PlaneMesh_b8058")
 
 [node name="Doors" type="Node3D" parent="." unique_id=2092726336 groups=["Doors"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660836, -2.093651)
@@ -232,3 +237,29 @@ shape = SubResource("BoxShape3D_xs5lb")
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.004991293, 0)
 pixel_size = 0.025
 text = "test"
+
+[node name="Node3D" type="Node3D" parent="." unique_id=394295710]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=1863007799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_ycrx0")
+mesh = SubResource("PlaneMesh_dfpbj")
+skeleton = NodePath("../../Sockets/South")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=1521099544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.5)
+material_override = SubResource("StandardMaterial3D_73ndn")
+mesh = SubResource("PlaneMesh_dfpbj")
+skeleton = NodePath("../../Sockets/South")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=1679164874]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 1.5)
+material_override = SubResource("StandardMaterial3D_nhrdr")
+mesh = SubResource("PlaneMesh_dfpbj")
+skeleton = NodePath("../../Sockets/South")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1744799702]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_xs5lb")
+mesh = SubResource("PlaneMesh_d078o")
+skeleton = NodePath("../..")

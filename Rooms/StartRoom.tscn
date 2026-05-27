@@ -18,14 +18,29 @@ albedo_texture = ExtResource("3_m516k")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_symuv"]
-size = Vector2(1, 1)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_51acx"]
 size = Vector3(2.0371552, 0.088378906, 0.20358276)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vft4a"]
 size = Vector3(3.592877, 3.17, 0.298)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iv7gp"]
+albedo_color = Color(1, 0.8713858, 0.37129125, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1ym0b"]
+size = Vector2(1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dm278"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_51acx"]
+albedo_color = Color(0.24807912, 0.35388368, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vft4a"]
+albedo_color = Color(0.94758934, 0.11836553, 0.4140708, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pkbhq"]
+size = Vector2(1, 1)
 
 [node name="StartRoom" type="Node3D" unique_id=1984975237]
 script = ExtResource("1_4hdaj")
@@ -49,11 +64,6 @@ transform = Transform3D(2.0491152, 0, 0, 0, 1, 0, 0, 0, 2.0151305, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=145549894]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
-mesh = SubResource("PlaneMesh_symuv")
-skeleton = NodePath("../Sockets/West")
 
 [node name="Doors" type="Node3D" parent="." unique_id=645326115 groups=["Doors"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660836, -2.093651)
@@ -223,3 +233,29 @@ shape = SubResource("BoxShape3D_vft4a")
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.004991293, 0)
 pixel_size = 0.025
 text = "test"
+
+[node name="Node3D" type="Node3D" parent="." unique_id=702285140]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=925012732]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_iv7gp")
+mesh = SubResource("PlaneMesh_1ym0b")
+skeleton = NodePath("../../Sockets/South")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=289779807]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.5)
+material_override = SubResource("StandardMaterial3D_dm278")
+mesh = SubResource("PlaneMesh_1ym0b")
+skeleton = NodePath("../../Sockets/South")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=386645731]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 1.5)
+material_override = SubResource("StandardMaterial3D_51acx")
+mesh = SubResource("PlaneMesh_1ym0b")
+skeleton = NodePath("../../Sockets/South")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1326275442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_vft4a")
+mesh = SubResource("PlaneMesh_pkbhq")
+skeleton = NodePath("../..")

@@ -17,8 +17,20 @@ albedo_texture = ExtResource("1_782l8")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_08uu4"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j0eab"]
+albedo_color = Color(1, 0.8713858, 0.37129125, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_symuv"]
 size = Vector2(1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_goroc"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nws5t"]
+albedo_color = Color(0.24807912, 0.35388368, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cvab8"]
+albedo_color = Color(0.94758934, 0.11836553, 0.4140708, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_e1bfu"]
 size = Vector2(1, 1)
@@ -69,21 +81,25 @@ mesh = SubResource("PlaneMesh_08uu4")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=145549894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_j0eab")
 mesh = SubResource("PlaneMesh_symuv")
 skeleton = NodePath("../../Sockets/South")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=261807875]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.5)
+material_override = SubResource("StandardMaterial3D_goroc")
 mesh = SubResource("PlaneMesh_symuv")
 skeleton = NodePath("../../Sockets/South")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=663938677]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 1.5)
+material_override = SubResource("StandardMaterial3D_nws5t")
 mesh = SubResource("PlaneMesh_symuv")
 skeleton = NodePath("../../Sockets/South")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=841208009]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_cvab8")
 mesh = SubResource("PlaneMesh_e1bfu")
 skeleton = NodePath("../..")
 
