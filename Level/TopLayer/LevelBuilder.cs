@@ -275,8 +275,8 @@ public partial class LevelBuilder : Node
 
     private static Vector3 GetDirectionVector(Direction dir) => dir switch
     {
-        Direction.North => Vector3.Forward,
-        Direction.South => Vector3.Back,
+        Direction.North => Vector3.Back,
+        Direction.South => Vector3.Forward,
         Direction.East => Vector3.Right,
         Direction.West => Vector3.Left,
         _ => Vector3.Zero

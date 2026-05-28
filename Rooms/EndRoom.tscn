@@ -248,28 +248,44 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0
 pixel_size = 0.025
 text = "test"
 
-[node name="Node3D" type="Node3D" parent="." unique_id=526931190]
+[node name="Node3D" type="Node3D" parent="." unique_id=761077030]
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=681611496]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=73558734]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
 material_override = SubResource("StandardMaterial3D_7m7qy")
 mesh = SubResource("PlaneMesh_aclt2")
 skeleton = NodePath("../../Sockets/South")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=632657118]
+[node name="Label3D" type="Label3D" parent="Node3D/MeshInstance3D2" unique_id=1618263804]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0058836043, 0)
+text = "WEST "
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=1881073879]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.5)
 material_override = SubResource("StandardMaterial3D_6cyha")
 mesh = SubResource("PlaneMesh_aclt2")
 skeleton = NodePath("../../Sockets/South")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=968969608]
+[node name="Label3D" type="Label3D" parent="Node3D/MeshInstance3D3" unique_id=1871000401]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0058836043, 0)
+text = "SOUTH"
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=1555249550]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 1.5)
 material_override = SubResource("StandardMaterial3D_13i73")
 mesh = SubResource("PlaneMesh_aclt2")
 skeleton = NodePath("../../Sockets/South")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1641149667]
+[node name="Label3D" type="Label3D" parent="Node3D/MeshInstance3D4" unique_id=2099840070]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0058836043, 0)
+text = "North"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=940928195]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 0)
 material_override = SubResource("StandardMaterial3D_ufad1")
 mesh = SubResource("PlaneMesh_k4rux")
 skeleton = NodePath("../..")
+
+[node name="Label3D" type="Label3D" parent="Node3D/MeshInstance3D" unique_id=1610997013]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0058836043, 0)
+text = "EAST"
