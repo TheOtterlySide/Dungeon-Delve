@@ -6,12 +6,12 @@ namespace DungeonDelve.Rooms.SPECIAL;
 public partial class RoomSocket : Marker3D
 {
     [Export] public Direction SocketDirection; 
-    public bool isUsed;
+    public bool IsUsed;
     
     public void Use()
     {
-        if (isUsed) return;
-        isUsed = true;
+        if (IsUsed) return;
+        IsUsed = true;
     }
 
     public Direction GetDirection() => SocketDirection;

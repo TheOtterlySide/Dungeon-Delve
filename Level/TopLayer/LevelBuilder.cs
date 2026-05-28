@@ -53,7 +53,6 @@ public partial class LevelBuilder : Node
 
     public void Initial()
     {
-        GD.Print("North: Blue, South: Green, East: Red, West: Yellow");
         LoadRoomScenes();
         InstantiateRooms();
         PlaceRoomsOnGrid();
@@ -83,7 +82,10 @@ public partial class LevelBuilder : Node
 
                 GD.Print($"Dir: {dir} | Connected: {connected} | Child: {child?.Name} | Target: {target.Name}");
 
-                if (child == null) continue;
+                if (child == null)
+                {
+                    continue;
+                }
 
                 child.Visible = true;
             }
@@ -106,7 +108,9 @@ public partial class LevelBuilder : Node
         foreach (var file in ResourceLoader.ListDirectory(path))
         {
             if (file.EndsWith(".tscn"))
+            {
                 target.Add(GD.Load<PackedScene>(path + file));
+            }
         }
     }
 
@@ -166,7 +170,7 @@ public partial class LevelBuilder : Node
             lastDir = freeSocket.GetDirection();
             var newCursor = MoveInGrid(cursor, lastDir);
 
-            if (IsGridOccupied(newCursor))
+            if (!CanPlaceRoom(_roomPool[0], newCursor, lastDir))
             {
                 freeSocket.Use();
                 continue;
@@ -214,6 +218,15 @@ public partial class LevelBuilder : Node
             var candidate = MoveInGrid(GetGridCoords(anchor), socket.SocketDirection);
             if (IsGridOccupied(candidate)) continue;
 
+            var opposite = Opposite(socket.SocketDirection);
+            var exitSocket = _exitRoomInstance.RoomSockets
+                .FirstOrDefault(s => s.SocketDirection == opposite && !s.IsUsed);
+            
+            if (exitSocket == null)
+            {
+                continue;
+            }
+            
             anchor.ConnectedDirections.Add(socket.SocketDirection);
             _exitRoomInstance.ConnectedDirections.Add(Opposite(socket.SocketDirection));
 
@@ -238,8 +251,12 @@ public partial class LevelBuilder : Node
     private Vector2I GetGridCoords(Room room)
     {
         foreach (var kvp in _grid)
+        {
             if (kvp.Value == room)
+            {
                 return new Vector2I(kvp.Key.x, kvp.Key.y);
+            }
+        }
 
         throw new InvalidOperationException($"Room '{room.Name}' is not registered in the grid.");
     }
@@ -271,6 +288,20 @@ public partial class LevelBuilder : Node
         newRoom.GlobalPosition = origin.GlobalPosition +
                                  origin.GetSizeOfRoom() * GetDirectionVector(socket.SocketDirection);
         return newRoom;
+    }
+    
+    private bool CanPlaceRoom(Room next, Vector2I targetPos, Direction incomingDir)
+    {
+        if (IsGridOccupied(targetPos))
+        {
+            return false;
+        }
+
+        var opposite = Opposite(incomingDir);
+        var hasSocket = next.RoomSockets
+            .Any(s => s.SocketDirection == opposite && !s.IsUsed);
+
+        return hasSocket;
     }
 
     private static Vector3 GetDirectionVector(Direction dir) => dir switch

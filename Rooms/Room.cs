@@ -25,7 +25,7 @@ public partial class Room : Node3D
 
     public RoomSocket GetAvailableRandomSocket(Direction lastDirection)
     {
-        var available = RoomSockets.Where(x => !x.isUsed).ToList();
+        var available = RoomSockets.Where(x => !x.IsUsed).ToList();
         if (available.Count == 0) return null;
 
         var weights = available
@@ -36,10 +36,10 @@ public partial class Room : Node3D
     }
 
     public List<RoomSocket> GetAvailableSockets() =>
-        RoomSockets.Where(x => !x.isUsed).ToList();
+        RoomSockets.Where(x => !x.IsUsed).ToList();
 
     public RoomSocket GetAvailableSocketOppositeSite(List<RoomSocket> sockets, Direction dir) =>
-        sockets.FirstOrDefault(x => !x.isUsed && x.GetDirection() == x.GetOppositeDirection(dir));
+        sockets.FirstOrDefault(x => !x.IsUsed && x.GetDirection() == x.GetOppositeDirection(dir));
 
     public float GetSizeOfRoom()
     {
