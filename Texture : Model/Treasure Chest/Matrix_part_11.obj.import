@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bv8qlgouft4pr"
+path="res://.godot/imported/Matrix_part_11.obj-892f322e7ae94a96bf84d81094ddba07.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Matrix_part_11.obj-892f322e7ae94a96bf84d81094ddba07.mesh"]
+
+source_file="res://Texture : Model/Treasure Chest/Matrix_part_11.obj"
+dest_files=["res://.godot/imported/Matrix_part_11.obj-892f322e7ae94a96bf84d81094ddba07.mesh", "res://.godot/imported/Matrix_part_11.obj-892f322e7ae94a96bf84d81094ddba07.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

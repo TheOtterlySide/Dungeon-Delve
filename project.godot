@@ -27,6 +27,14 @@ WwiseRuntimeManager="*res://addons/Wwise/runtime/wwise_runtime_manager.gd"
 
 project/assembly_name="Dungeon Delve"
 
+[file_customization]
+
+folder_colors={
+"res://Level/": "green",
+"res://Rooms/": "red",
+"res://Scenes/": "purple"
+}
+
 [global_group]
 
 SOCKET="Group for Exit nodes"
