@@ -28,6 +28,8 @@ public partial class Player : CharacterBody3D
     [ExportGroup("World")] 
     [Export] private Variant _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity");
     [Export] private float _gravityMultiplier = 3f;
+    
+    [Signal] public delegate void PlayerInteractedEventHandler();
     public bool canInteract = false;
     public override void _Ready()
     {
@@ -40,8 +42,20 @@ public partial class Player : CharacterBody3D
         HandleMovement(delta);
         HandleCamera();
         HandleMouse();
-
+        HandleInteraction();
         MoveAndSlide();
+    }
+
+    private void HandleInteraction()
+    {
+        if (canInteract)
+        {
+            if (Input.IsActionJustPressed("interact"))
+            {
+                EmitSignal("PlayerInteracted");
+                GD.Print("interact");
+            }
+        }
     }
 
     private static void HandleMouse()
