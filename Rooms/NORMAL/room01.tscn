@@ -41,6 +41,8 @@ albedo_color = Color(0.94758934, 0.11836553, 0.4140708, 1)
 [sub_resource type="PlaneMesh" id="PlaneMesh_rk17x"]
 size = Vector2(1, 1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_j0eab"]
+
 [node name="Room01" type="Node3D" unique_id=1984975237]
 script = ExtResource("1_e1bfu")
 
@@ -246,44 +248,52 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0
 pixel_size = 0.025
 text = "test"
 
-[node name="Node3D" type="Node3D" parent="." unique_id=1441667903]
+[node name="Debug" type="Node3D" parent="." unique_id=1441667903]
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=1581584069]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Debug" unique_id=1581584069]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
 material_override = SubResource("StandardMaterial3D_j0eab")
 mesh = SubResource("PlaneMesh_goroc")
 skeleton = NodePath("../../Sockets/South")
 
-[node name="Label3D" type="Label3D" parent="Node3D/MeshInstance3D2" unique_id=140320889]
+[node name="Label3D" type="Label3D" parent="Debug/MeshInstance3D2" unique_id=140320889]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0058836043, 0)
 text = "WEST "
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=1856744383]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Debug" unique_id=1856744383]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.5)
 material_override = SubResource("StandardMaterial3D_nws5t")
 mesh = SubResource("PlaneMesh_goroc")
 skeleton = NodePath("../../Sockets/South")
 
-[node name="Label3D" type="Label3D" parent="Node3D/MeshInstance3D3" unique_id=1383428228]
+[node name="Label3D" type="Label3D" parent="Debug/MeshInstance3D3" unique_id=1383428228]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0058836043, 0)
 text = "SOUTH"
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=521293223]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Debug" unique_id=521293223]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 1.5)
 material_override = SubResource("StandardMaterial3D_cvab8")
 mesh = SubResource("PlaneMesh_goroc")
 skeleton = NodePath("../../Sockets/South")
 
-[node name="Label3D" type="Label3D" parent="Node3D/MeshInstance3D4" unique_id=1021030046]
+[node name="Label3D" type="Label3D" parent="Debug/MeshInstance3D4" unique_id=1021030046]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0058836043, 0)
 text = "North"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1309025541]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Debug" unique_id=1309025541]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 0)
 material_override = SubResource("StandardMaterial3D_67h27")
 mesh = SubResource("PlaneMesh_rk17x")
 skeleton = NodePath("../..")
 
-[node name="Label3D" type="Label3D" parent="Node3D/MeshInstance3D" unique_id=810943857]
+[node name="Label3D" type="Label3D" parent="Debug/MeshInstance3D" unique_id=810943857]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0058836043, 0)
 text = "EAST"
+
+[node name="Area Stuff" type="Node3D" parent="." unique_id=1938508393]
+
+[node name="Area3D" type="Area3D" parent="Area Stuff" unique_id=2139031186]
+
+[node name="SpawnArea" type="CollisionShape3D" parent="Area Stuff/Area3D" unique_id=476036695]
+transform = Transform3D(3.8473065, 0, 0, 0, 0.08212203, 0, 0, 0, 3.858315, 0, 0.17751908, 0)
+shape = SubResource("BoxShape3D_j0eab")

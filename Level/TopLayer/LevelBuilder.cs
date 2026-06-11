@@ -13,6 +13,7 @@ public partial class LevelBuilder : Node
 
     [Export] private PackedScene _startRoom;
     [Export] private PackedScene _exitRoom;
+    [Export] private PackedScene _chestScene;
 
     [ExportGroup("Paths")]
     [Export] private string _roomPath;
@@ -20,6 +21,9 @@ public partial class LevelBuilder : Node
     [Export] private string _specialRoomPath;
     [Export] private string _bossRoomPath;
 
+    private Room _testRoom;
+
+    private bool firstRun = true;
     // -------------------------------------------------------------------------
     // Config
     // -------------------------------------------------------------------------
@@ -57,6 +61,33 @@ public partial class LevelBuilder : Node
         InstantiateRooms();
         PlaceRoomsOnGrid();
         PlaceWallsAndDoors();
+
+        SpawnChests();
+    }
+
+    // -------------------------------------------------------------------------
+    // Chests & Enemies
+    // -------------------------------------------------------------------------
+    private void SpawnChests()
+    {
+        var areaNode = _testRoom.GetNode("Area Stuff");
+        var spawnArea = areaNode.FindChild("SpawnArea", true, false);
+        var spawnAreaRight = spawnArea as Node3D;
+
+        if (spawnAreaRight == null)
+        {
+            GD.PrintErr("Spawn area not found or is not a Node3D.");
+            return;
+        }
+
+        var randomX = spawnAreaRight.GlobalPosition.X + (float)(_random.NextDouble() - 0.5) * spawnAreaRight.Scale.X;
+        var randomZ = spawnAreaRight.GlobalPosition.Z + (float)(_random.NextDouble() - 0.5) * spawnAreaRight.Scale.Z;
+
+        var spawnPosition = new Vector3(randomX, spawnAreaRight.GlobalPosition.Y, randomZ);
+        var instant = (Node3D)_chestScene.Instantiate();
+
+        AddChild(instant);
+        instant.GlobalPosition = spawnPosition;
     }
 
     // -------------------------------------------------------------------------
@@ -134,6 +165,14 @@ public partial class LevelBuilder : Node
     {
         var room = (Room)scene.Instantiate();
         AddChild(room);
+
+        //TODO: DEBUG, delete laterz
+        if (room.Name == "Room01" && firstRun)
+        {
+            _testRoom = room;
+            firstRun = false;
+        }
+
         return room;
     }
 
@@ -221,12 +260,12 @@ public partial class LevelBuilder : Node
             var opposite = Opposite(socket.SocketDirection);
             var exitSocket = _exitRoomInstance.RoomSockets
                 .FirstOrDefault(s => s.SocketDirection == opposite && !s.IsUsed);
-            
+
             if (exitSocket == null)
             {
                 continue;
             }
-            
+
             anchor.ConnectedDirections.Add(socket.SocketDirection);
             _exitRoomInstance.ConnectedDirections.Add(Opposite(socket.SocketDirection));
 
@@ -289,7 +328,7 @@ public partial class LevelBuilder : Node
                                  origin.GetSizeOfRoom() * GetDirectionVector(socket.SocketDirection);
         return newRoom;
     }
-    
+
     private bool CanPlaceRoom(Room next, Vector2I targetPos, Direction incomingDir)
     {
         if (IsGridOccupied(targetPos))

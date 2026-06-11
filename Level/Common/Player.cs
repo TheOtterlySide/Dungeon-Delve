@@ -28,7 +28,7 @@ public partial class Player : CharacterBody3D
     [ExportGroup("World")] 
     [Export] private Variant _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity");
     [Export] private float _gravityMultiplier = 3f;
-
+    public bool canInteract = false;
     public override void _Ready()
     {
         _jumpCount = _jumpCountBase;
