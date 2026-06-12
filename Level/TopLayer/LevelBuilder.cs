@@ -163,9 +163,12 @@ public partial class LevelBuilder : Node
 
     private Room InstantiateAndAdd(PackedScene scene)
     {
+
+       
         var room = (Room)scene.Instantiate();
         AddChild(room);
-
+        room.Init(); // ← explizit initialisieren, nicht auf _Ready() warten
+        
         //TODO: DEBUG, delete laterz
         if (room.Name == "Room01" && firstRun)
         {
@@ -190,58 +193,92 @@ public partial class LevelBuilder : Node
     // -------------------------------------------------------------------------
 
     private void PlaceRoomsOnGrid()
+{
+    var cursor = new Vector2I(0, 0);
+    var lastDir = default(Direction);
+    var current = _startRoomInstance;
+    var count = 0;
+
+    PlaceInGrid(current, cursor);
+    GD.Print($"StartRoom sockets total: {_startRoomInstance.RoomSockets.Count}");
+    GD.Print($"StartRoom available sockets: {_startRoomInstance.GetAvailableSockets().Count}");
+    foreach (var s in _startRoomInstance.RoomSockets)
+        GD.Print($"  Socket: {s.SocketDirection} | IsUsed: {s.IsUsed}");
+    _allRooms.Add(_startRoomInstance);
+    _allRooms.AddRange(_roomPool);
+
+    var placedRooms = new List<Room> { _startRoomInstance };
+
+    while (_roomPool.Count > 0)
     {
-        var cursor = new Vector2I(0, 0);
-        var lastDir = default(Direction);
-        var current = _startRoomInstance;
-        var count = 0;
-        PlaceInGrid(current, cursor);
-        _allRooms.Add(_startRoomInstance);
-        _allRooms.AddRange(_roomPool);
-
-        while (_roomPool.Count > 0)
+        GD.Print($"current: {current.Name} | available: {current.GetAvailableSockets().Count} | lastDir: {lastDir}");
+        var freeSocket = current.GetAvailableRandomSocket(lastDir);
+        GD.Print($"freeSocket: {freeSocket?.SocketDirection.ToString() ?? "NULL"}");
+        
+        if (freeSocket == null)
         {
-            var next = _roomPool[0];
-            var freeSocket = current.GetAvailableRandomSocket(lastDir);
+            var fallback = placedRooms
+                .Where(r => r.GetAvailableSockets().Count > 0)
+                .OrderBy(_ => _random.Next()) 
+                .FirstOrDefault();
 
-            if (freeSocket == null) break;
+            if (fallback == null)
+            {
+                GD.PrintErr("LevelBuilder: No sockets left anywhere – aborting.");
+                break;
+            }
 
-            lastDir = freeSocket.GetDirection();
-            var newCursor = MoveInGrid(cursor, lastDir);
+            current = fallback;
+            cursor = GetGridCoords(current);
+            lastDir = default;
+            continue;
+        }
 
-            if (!CanPlaceRoom(_roomPool[0], newCursor, lastDir))
+        lastDir = freeSocket.GetDirection();
+        var newCursor = MoveInGrid(cursor, lastDir);
+
+        if (!CanPlaceRoom(_roomPool[0], newCursor, lastDir))
+        {
+            var alternativeIndex = _roomPool
+                .FindIndex(r => CanPlaceRoom(r, newCursor, lastDir));
+
+            if (alternativeIndex == -1)
             {
                 freeSocket.Use();
                 continue;
             }
 
-            count++;
-            _roomPool[0].GetNodeOrNull<Label3D>("Debug Name")?.SetText(count.ToString());
-            _roomPool[0].Name = "Room" + count;
-
-            var oppositeSocket = next.GetAvailableSocketOppositeSite(next.RoomSockets, lastDir);
-            freeSocket.Use();
-            current.ConnectedDirections.Add(lastDir);
-
-            if (oppositeSocket != null)
-            {
-                oppositeSocket.Use();
-                next.ConnectedDirections.Add(Opposite(lastDir));
-                GD.Print($"Room: {_roomPool[0].Name} | Free Socket: {freeSocket.SocketDirection} | Cursor: {newCursor} | Opposite: {oppositeSocket.GetParent().Name}");
-            }
-
-            cursor = newCursor;
-            PlaceInGrid(next, cursor);
-            _roomPool.RemoveAt(0);
-
-            current = AttachRoom(current, next, freeSocket);
+            (_roomPool[0], _roomPool[alternativeIndex]) = (_roomPool[alternativeIndex], _roomPool[0]);
         }
 
-        LogUnplacedRooms();
-        PlaceExitRoom();
-        _allRooms.Add(_exitRoomInstance);
-        PrintGridDebug();
+        count++;
+        var next = _roomPool[0];
+        next.GetNodeOrNull<Label3D>("Debug Name")?.SetText(count.ToString());
+        next.Name = "Room" + count;
+
+        var oppositeSocket = next.GetAvailableSocketOppositeSite(next.RoomSockets, lastDir);
+        freeSocket.Use();
+        current.ConnectedDirections.Add(lastDir);
+
+        if (oppositeSocket != null)
+        {
+            oppositeSocket.Use();
+            next.ConnectedDirections.Add(Opposite(lastDir));
+        }
+
+        cursor = newCursor;
+        PlaceInGrid(next, cursor);
+        _roomPool.RemoveAt(0);
+
+        current = AttachRoom(current, next, freeSocket);
+        placedRooms.Add(current);
     }
+
+    LogUnplacedRooms();
+    PlaceExitRoom();
+    _allRooms.Add(_exitRoomInstance);
+    PrintGridDebug();
+}
 
     private void PlaceExitRoom()
     {

@@ -14,13 +14,18 @@ public partial class Room : Node3D
 
     private const float ChangeDirProbability = 0.1f;
 
-    public override void _Ready()
+    public void Init()
     {
         RoomSockets = GetNode("Sockets").GetChildren()
             .OfType<RoomSocket>()
             .ToList();
 
         SocketCount = RoomSockets.Count;
+    }
+
+    public override void _Ready()
+    {
+        Init();
     }
 
     public RoomSocket GetAvailableRandomSocket(Direction lastDirection)
