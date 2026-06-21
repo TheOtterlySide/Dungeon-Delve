@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{179CB675-B9DD-4227-A92F-79C21B4691CB}" SchemaVersion="133">
+<WwiseDocument Type="WorkUnit" ID="{179CB675-B9DD-4227-A92F-79C21B4691CB}" SchemaVersion="137">
 	<Effects>
 		<WorkUnit Name="Factory iZotope Box Modeler" ID="{179CB675-B9DD-4227-A92F-79C21B4691CB}" PersistMode="Standalone">
 			<ChildrenList>
@@ -16,7 +16,7 @@
 						<PluginMediaSource Name="_boxmodel" ID="{C50692C8-65AF-4302-8169-4B1739A02088}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="459775700"/>
+								<MediaID ID="965606000"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -32,7 +32,8 @@
 						<PluginMediaSource Name="_boxmodel" ID="{D2569304-EE64-4CC6-AB7B-1D3ACCE1CFA7}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="475887785"/>
+								<MediaID ID="459775696"/>
+								<MediaID Platform="Windows" ID="211286947"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -49,7 +50,7 @@
 						<PluginMediaSource Name="_boxmodel" ID="{5F4CD654-5CE2-442C-82D0-7AA520FCC0CB}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="475887788"/>
+								<MediaID ID="903989417"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -64,7 +65,7 @@
 						<PluginMediaSource Name="_boxmodel" ID="{E0DAFC91-04D8-41F9-90D3-D33081ABCAF0}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="459775701"/>
+								<MediaID ID="590155989"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -79,7 +80,8 @@
 						<PluginMediaSource Name="_boxmodel" ID="{1AFF01D0-DC31-41C1-A0EB-03E1359514D5}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="459775698"/>
+								<MediaID ID="459775696"/>
+								<MediaID Platform="Mac" ID="161915250"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -94,7 +96,8 @@
 						<PluginMediaSource Name="_boxmodel" ID="{0A4B2342-5182-48DE-8975-91940213D442}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="459775697"/>
+								<MediaID ID="475887784"/>
+								<MediaID Platform="Windows" ID="298944768"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -109,7 +112,8 @@
 						<PluginMediaSource Name="_boxmodel" ID="{1B593321-7F63-4BC7-A61D-043284B2DE23}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="459775699"/>
+								<MediaID ID="823722507"/>
+								<MediaID Platform="Windows" ID="475887784"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -124,7 +128,8 @@
 						<PluginMediaSource Name="_boxmodel" ID="{2CB56BB7-790B-4F50-A4A2-99D3E5FC0506}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="459775696"/>
+								<MediaID ID="298944768"/>
+								<MediaID Platform="Windows" ID="161915250"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -140,7 +145,8 @@
 						<PluginMediaSource Name="_boxmodel" ID="{BE94D118-A130-4BF0-AB81-467C31EA57AD}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="475887786"/>
+								<MediaID ID="335444096"/>
+								<MediaID Platform="Windows" ID="818534887"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -155,7 +161,8 @@
 						<PluginMediaSource Name="_boxmodel" ID="{1455BF48-51B4-4887-A883-A259A888BEAD}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="475887787"/>
+								<MediaID ID="818534887"/>
+								<MediaID Platform="Windows" ID="823722507"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -170,7 +177,8 @@
 						<PluginMediaSource Name="_boxmodel" ID="{218C80FB-B7BD-4923-A6DC-D147DA9D643A}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="459775702"/>
+								<MediaID ID="211286947"/>
+								<MediaID Platform="Windows" ID="711600817"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>
@@ -181,7 +189,8 @@
 						<PluginMediaSource Name="_boxmodel" ID="{2A054DA1-8524-432D-BB6C-0D0410B66AD6}">
 							<ParentPluginID>462899</ParentPluginID>
 							<MediaIDList>
-								<MediaID ID="459775703"/>
+								<MediaID ID="711600817"/>
+								<MediaID Platform="Windows" ID="335444096"/>
 							</MediaIDList>
 						</PluginMediaSource>
 					</ChildrenList>

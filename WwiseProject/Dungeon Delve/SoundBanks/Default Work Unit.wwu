@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{65F326BE-836A-466B-B88E-F8AD7C824C92}" SchemaVersion="133">
+<WwiseDocument Type="WorkUnit" ID="{65F326BE-836A-466B-B88E-F8AD7C824C92}" SchemaVersion="137">
 	<SoundBanks>
 		<WorkUnit Name="Default Work Unit" ID="{65F326BE-836A-466B-B88E-F8AD7C824C92}" PersistMode="Standalone">
 			<ChildrenList>

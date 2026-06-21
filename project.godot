@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Dungeon Delve"
 run/main_scene="uid://n6f26gc7p7le"
-config/features=PackedStringArray("4.6", "C#")
+config/features=PackedStringArray("4.7", "C#")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -31,6 +31,10 @@ window/size/viewport_height=720
 [dotnet]
 
 project/assembly_name="Dungeon Delve"
+
+[editor_plugins]
+
+enabled=PackedStringArray()
 
 [file_customization]
 
