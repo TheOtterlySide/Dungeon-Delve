@@ -53,7 +53,6 @@ public partial class Player : CharacterBody3D
             if (Input.IsActionJustPressed("interact"))
             {
                 EmitSignal("PlayerInteracted");
-                GD.Print("interact");
             }
         }
     }

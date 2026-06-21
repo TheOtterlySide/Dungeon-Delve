@@ -28,7 +28,7 @@ skeleton = NodePath("../..")
 [node name="InteractArea" type="Area3D" parent="." unique_id=603490186]
 
 [node name="SpawnArea" type="CollisionShape3D" parent="InteractArea" unique_id=11108965]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, -0.040536165)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, -0.040536165)
 shape = SubResource("SphereShape3D_sn604")
 
 [node name="Label3D" type="Label3D" parent="." unique_id=1738565703]

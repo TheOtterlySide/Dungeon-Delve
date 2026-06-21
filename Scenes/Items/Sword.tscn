@@ -3,23 +3,19 @@
 [ext_resource type="Script" uid="uid://bs6wxn4qfc50i" path="res://Level/Common/Item/Weapon.cs" id="1_6l4sq"]
 [ext_resource type="ArrayMesh" uid="uid://c803lb8djjepy" path="res://Texture : Model/VoxelDungeonSet/Obj/sword.obj" id="2_8kelq"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tic4c"]
-radius = 0.41992188
-height = 1.8149414
-
 [node name="Sword" type="Node3D" unique_id=187117011]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4033794, 0)
 script = ExtResource("1_6l4sq")
 Damage = 10
 Durability = 5
+_moveable = true
+_amplitude = 0.3
+_freq = 5.0
+_rotationSpeed = 2.0
 Name = "Wood Sword"
 Description = "Woody "
 
-[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=1544301064]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1612146012]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.273125e-05, 0.78893554, 0)
-shape = SubResource("CapsuleShape3D_tic4c")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D" unique_id=1549467661]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1549467661]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0506652, 0, 0.04787302)
 mesh = ExtResource("2_8kelq")
+skeleton = NodePath("")

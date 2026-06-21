@@ -167,7 +167,7 @@ public partial class LevelBuilder : Node
        
         var room = (Room)scene.Instantiate();
         AddChild(room);
-        room.Init(); // ← explizit initialisieren, nicht auf _Ready() warten
+        room.Init();
         
         //TODO: DEBUG, delete laterz
         if (room.Name == "Room01" && firstRun)
