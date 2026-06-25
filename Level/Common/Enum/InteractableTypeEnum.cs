@@ -5,5 +5,6 @@ public enum InteractableTypeEnum
     Chest,
     Door,
     Lever,
-    NPC
+    NPC,
+    Item
 }

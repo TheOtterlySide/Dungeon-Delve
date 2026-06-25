@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://csewb7d12vbwl"]
 
-[ext_resource type="Script" uid="uid://4cj2f85eqlnm" path="res://Scenes/Interactable.cs" id="1_kaa0s"]
 [ext_resource type="ArrayMesh" uid="uid://8k41ksdry7jd" path="res://Texture : Model/Treasure Chest/Matrix.obj" id="1_sn604"]
 [ext_resource type="PackedScene" uid="uid://bkiet8fn04tp0" path="res://Scenes/Items/Sword.tscn" id="2_3hwoc"]
+[ext_resource type="Script" uid="uid://dsx44trrpwywr" path="res://Level/Common/Interactables/Chest.cs" id="3_3hwoc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sn604"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_sn604"]
 
 [node name="TreasureChest" type="Node3D" unique_id=1959617605 node_paths=PackedStringArray("_label")]
-script = ExtResource("1_kaa0s")
-_label = NodePath("Label3D")
+script = ExtResource("3_3hwoc")
 _item = ExtResource("2_3hwoc")
+_label = NodePath("Label3D")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=251734648]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0050719976)
@@ -27,9 +27,12 @@ skeleton = NodePath("../..")
 
 [node name="InteractArea" type="Area3D" parent="." unique_id=603490186]
 
-[node name="SpawnArea" type="CollisionShape3D" parent="InteractArea" unique_id=11108965]
+[node name="SpawnArea" type="CollisionShape3D" parent="InteractArea" unique_id=11108965 node_paths=PackedStringArray("_label")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, -0.040536165)
 shape = SubResource("SphereShape3D_sn604")
+script = ExtResource("3_3hwoc")
+_item = ExtResource("2_3hwoc")
+_label = NodePath("../../Label3D")
 
 [node name="Label3D" type="Label3D" parent="." unique_id=1738565703]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.000108897686, 0.6912817, -0.035158873)
@@ -37,5 +40,5 @@ visible = false
 pixel_size = 0.067
 text = "TEST"
 
-[connection signal="body_entered" from="InteractArea" to="." method="_on_area_3d_body_entered"]
-[connection signal="body_exited" from="InteractArea" to="." method="_on_area_3d_body_exited"]
+[connection signal="body_entered" from="InteractArea" to="." method="_on_interact_area_body_entered"]
+[connection signal="body_exited" from="InteractArea" to="." method="_on_interact_area_body_exited"]
