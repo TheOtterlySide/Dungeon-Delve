@@ -12,7 +12,6 @@ public partial class Chest : Interactable
     private bool _isOpened;
     private Node3D _itemNode;
     private List<ItemTypeEnum> _itemTypes;
-    private List<WeaponTypeEnum> _weaponTypes;
     private ItemTypeEnum _itemEnum;
     private PackedScene _item;
 
@@ -22,7 +21,6 @@ public partial class Chest : Interactable
         _isOpened = false;
 
         _itemTypes = System.Enum.GetValues(typeof(ItemTypeEnum)).Cast<ItemTypeEnum>().ToList();
-        _weaponTypes = System.Enum.GetValues(typeof(WeaponTypeEnum)).Cast<WeaponTypeEnum>().ToList();
         _itemEnum = DecideItemType();
     }
 
@@ -53,13 +51,14 @@ public partial class Chest : Interactable
                 path = "res://Scenes/Items/Weapon";
                 break;
             case ItemTypeEnum.Potions:
-                path = "res://Scenes/Items/Weapon";
+                path = "res://Scenes/Items/Potion";
                 break;
             default:
                 break;
         }
 
         var availableScenes = DirContents(path);
+        if (availableScenes.Count == 0) return null;
         var rng = new RandomNumberGenerator();
         var item = availableScenes[rng.RandiRange(0, availableScenes.Count - 1)];
         
@@ -69,7 +68,7 @@ public partial class Chest : Interactable
     public List<string> DirContents(string path)
     {
         using var dir = DirAccess.Open(path);
-        var tempList = new List<string>();
+        var resultList = new List<string>();
         if (dir != null)
         {
             dir.ListDirBegin();
@@ -84,12 +83,12 @@ public partial class Chest : Interactable
                 {
                     GD.Print($"Found file: {fileName}");
                     var result = $"{path}/{fileName}";
-                    tempList.Add(result);
+                    resultList.Add(result);
                 }
                 fileName = dir.GetNext();
             }
             
-            return tempList;
+            return resultList;
         }
         
         else
