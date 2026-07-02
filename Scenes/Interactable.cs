@@ -17,7 +17,7 @@ public partial class Interactable : Node3D
             player.canInteract = true;
             _connected = true;
             _label.Visible = true;
-            player.PlayerInteracted += OnPlayerInteracted;
+            player.PlayerInteracted += () => OnPlayerInteracted(player);
         }
     }
 
@@ -28,9 +28,9 @@ public partial class Interactable : Node3D
             player.canInteract = false;
             _label.Visible = false;
             _connected = false;
-            player.PlayerInteracted -= OnPlayerInteracted; 
+            player.PlayerInteracted -= () => OnPlayerInteracted(player); 
         }
     }
 
-    protected virtual void OnPlayerInteracted() { }
+    protected virtual void OnPlayerInteracted(Player player) { }
 }

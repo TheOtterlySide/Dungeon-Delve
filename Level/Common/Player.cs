@@ -1,6 +1,9 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using DungeonDelve.Level.Common;
+using DungeonDelve.Level.Common.Item;
+using DungeonDelve.Level.TopLayer;
 
 public partial class Player : CharacterBody3D
 {
@@ -28,7 +31,7 @@ public partial class Player : CharacterBody3D
     [ExportGroup("World")] 
     [Export] private Variant _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity");
     [Export] private float _gravityMultiplier = 3f;
-    
+    [Export] public InventoryHandler _itemHandler;
     [Signal] public delegate void PlayerInteractedEventHandler();
     public bool canInteract = false;
     public override void _Ready()

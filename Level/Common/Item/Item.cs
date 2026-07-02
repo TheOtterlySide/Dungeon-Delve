@@ -21,6 +21,8 @@ public partial class Item : Interactable
     
     private float _time;
     public Vector3 _startPosition;
+    [Signal]
+    public delegate void ItemPickupSignalEventHandler();
     
     public void MoveAnimation(double delta)
     {
@@ -39,8 +41,9 @@ public partial class Item : Interactable
         
     }
     
-    protected override void OnPlayerInteracted()
+    protected override void OnPlayerInteracted(Player player)
     {
         QueueFree();
+        player._itemHandler.AddItem(this);
     }
 }

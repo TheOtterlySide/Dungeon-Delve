@@ -24,7 +24,7 @@ public partial class Chest : Interactable
         _itemEnum = DecideItemType();
     }
 
-    protected override void OnPlayerInteracted()
+    protected override void OnPlayerInteracted(Player player)
     {
         if (_isOpened) return;
 

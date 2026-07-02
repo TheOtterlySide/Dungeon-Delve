@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bax6r5bdmslfh" path="res://Rooms/StartRoom.tscn" id="3_h4a57"]
 [ext_resource type="PackedScene" uid="uid://bgpl716ogfcp" path="res://Rooms/EndRoom.tscn" id="4_v2rt0"]
 [ext_resource type="PackedScene" uid="uid://csewb7d12vbwl" path="res://Scenes/TreasureChest.tscn" id="5_h4a57"]
+[ext_resource type="Script" uid="uid://co1he3ygdo8ne" path="res://Level/TopLayer/InventoryHandler.cs" id="6_74erh"]
 [ext_resource type="WwiseBank" uid="uid://dklasu43l4e4a" path="res://Wwise/resources/SoundBank/{48AF1FAC-76E9-4919-BF3E-8B88278864BE}.tres" id="8_v2rt0"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l60kp"]
@@ -20,6 +21,9 @@ albedo_texture = ExtResource("1_r0ksi")
 [sub_resource type="PlaneMesh" id="PlaneMesh_rrwnl"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l60kp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_74erh"]
+font_size = 128
 
 [node name="Main" type="Node3D" unique_id=617513794]
 
@@ -36,6 +40,10 @@ _chestScene = ExtResource("5_h4a57")
 _roomPath = "res://Rooms/NORMAL/"
 _specialRoomPath = "res://Rooms/SPECIAL/"
 _bossRoomPath = "res://Rooms/BOSS/"
+
+[node name="InventoryHandler" type="Node" parent="GameManager" unique_id=845929411 node_paths=PackedStringArray("_player")]
+script = ExtResource("6_74erh")
+_player = NodePath("../../CharacterBody3D")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2113898279]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
@@ -54,7 +62,7 @@ material_override = SubResource("StandardMaterial3D_87g2j")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_rrwnl")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=283241400 node_paths=PackedStringArray("_camera") groups=["Player"]]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=283241400 node_paths=PackedStringArray("_camera", "_itemHandler") groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0597339, 0)
 script = ExtResource("2_87g2j")
 _speed = 8.0
@@ -66,6 +74,7 @@ _jumpCountBase = 1
 _camera = NodePath("Camera3D")
 _cameraSensivity = 0.001
 _gravityMultiplier = 3.5
+_itemHandler = NodePath("../GameManager/InventoryHandler")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1210590301]
 shape = SubResource("CapsuleShape3D_l60kp")
@@ -90,3 +99,16 @@ load_on = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 128.17575, 0)
 omni_range = 470.796
 omni_attenuation = -0.008
+
+[node name="HUD" type="Control" parent="." unique_id=2030748657]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="HUD" unique_id=1946723314]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 170.0
+text = "TEST"
+label_settings = SubResource("LabelSettings_74erh")
