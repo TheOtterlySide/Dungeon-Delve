@@ -1,7 +1,5 @@
-
-using System;
-using DungeonDelve.Level.Common;
 using DungeonDelve.Level.Common.Enum;
+using DungeonDelve.Level.Common.Item;
 using Godot;
 
 public partial class Weapon : Item

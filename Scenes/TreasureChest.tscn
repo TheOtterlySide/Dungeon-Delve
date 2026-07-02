@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://csewb7d12vbwl"]
 
 [ext_resource type="ArrayMesh" uid="uid://8k41ksdry7jd" path="res://Texture : Model/Treasure Chest/Matrix.obj" id="1_sn604"]
-[ext_resource type="PackedScene" uid="uid://bkiet8fn04tp0" path="res://Scenes/Items/Sword.tscn" id="2_3hwoc"]
 [ext_resource type="Script" uid="uid://dsx44trrpwywr" path="res://Level/Common/Interactables/Chest.cs" id="3_3hwoc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sn604"]
@@ -10,7 +9,6 @@
 
 [node name="TreasureChest" type="Node3D" unique_id=1959617605 node_paths=PackedStringArray("_label")]
 script = ExtResource("3_3hwoc")
-_item = ExtResource("2_3hwoc")
 _label = NodePath("Label3D")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=251734648]
@@ -31,7 +29,6 @@ skeleton = NodePath("../..")
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, -0.040536165)
 shape = SubResource("SphereShape3D_sn604")
 script = ExtResource("3_3hwoc")
-_item = ExtResource("2_3hwoc")
 _label = NodePath("../../Label3D")
 
 [node name="Label3D" type="Label3D" parent="." unique_id=1738565703]

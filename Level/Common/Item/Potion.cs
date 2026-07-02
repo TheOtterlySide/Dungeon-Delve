@@ -1,4 +1,4 @@
-using DungeonDelve.Level.Common;
+using DungeonDelve.Level.Common.Item;
 using Godot;
 
 public partial class Potion : Item

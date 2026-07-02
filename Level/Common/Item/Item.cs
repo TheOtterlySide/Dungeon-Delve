@@ -1,9 +1,10 @@
 using DungeonDelve.Level.Common.Enum;
+using DungeonDelve.Scenes;
 using Godot;
 
-namespace DungeonDelve.Level.Common;
+namespace DungeonDelve.Level.Common.Item;
 
-public partial class Item : Scenes.Interactable
+public partial class Item : Interactable
 {
     [ExportGroup("Item")] 
     [Export]

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dgus4ilgsgau7"]
+
+[ext_resource type="PackedScene" uid="uid://bkiet8fn04tp0" path="res://Scenes/Items/Weapon/Sword.tscn" id="1_1d6kg"]
+[ext_resource type="PackedScene" uid="uid://deb4b1ebpdcqd" path="res://Scenes/Items/Weapon/Axe.tscn" id="2_4y1lf"]
+
+[node name="ItemPool" type="Node3D" unique_id=173785274]
+
+[node name="Sword" parent="." unique_id=187117011 instance=ExtResource("1_1d6kg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6559652, 0.7705474, 1.0773399)
+visible = false
+
+[node name="Axe" parent="." unique_id=1657588980 instance=ExtResource("2_4y1lf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.68386656, 0.7352812, 1.2217927)
+visible = false

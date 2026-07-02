@@ -163,8 +163,6 @@ public partial class LevelBuilder : Node
 
     private Room InstantiateAndAdd(PackedScene scene)
     {
-
-       
         var room = (Room)scene.Instantiate();
         AddChild(room);
         room.Init();

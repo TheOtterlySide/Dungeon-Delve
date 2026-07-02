@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://deb4b1ebpdcqd"]
+
+[ext_resource type="Script" uid="uid://bs6wxn4qfc50i" path="res://Level/Common/Item/Weapon.cs" id="1_wqj7j"]
+[ext_resource type="ArrayMesh" uid="uid://b1jubn1t5uvse" path="res://Texture : Model/VoxelDungeonSet/Obj/hammer.obj" id="2_wqj7j"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jyn5g"]
+
+[node name="Axe" type="Node3D" unique_id=187117011 node_paths=PackedStringArray("_label")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4033794, 0)
+script = ExtResource("1_wqj7j")
+Damage = 10
+Durability = 5
+Name = "Wood Sword"
+Description = "Woody "
+_moveable = true
+_amplitude = 0.3
+_freq = 5.0
+_rotationSpeed = 2.0
+_label = NodePath("Label3D")
+_interactableType = 4
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1549467661]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0506652, 0, 0.04787302)
+mesh = ExtResource("2_wqj7j")
+skeleton = NodePath("")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=1418393520]
+visible = false
+text = "Awesome Axe"
+
+[node name="InteractArea" type="Area3D" parent="." unique_id=43507493]
+
+[node name="SpawnArea" type="CollisionShape3D" parent="InteractArea" unique_id=1837584117]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, -0.040536165)
+shape = SubResource("SphereShape3D_jyn5g")
+
+[connection signal="body_entered" from="InteractArea" to="." method="_on_interact_area_body_entered"]
+[connection signal="body_exited" from="InteractArea" to="." method="_on_interact_area_body_exited"]
