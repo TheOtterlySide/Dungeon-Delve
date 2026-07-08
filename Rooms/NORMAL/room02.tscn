@@ -6,6 +6,7 @@
 [ext_resource type="ArrayMesh" uid="uid://chj6usbo7166l" path="res://Texture : Model/VoxelDungeonSet/Obj/wall_flat.obj" id="3_62f1h"]
 [ext_resource type="ArrayMesh" uid="uid://dgqoadxor78hn" path="res://Texture : Model/VoxelDungeonSet/Obj/door_frame.obj" id="3_ggjtc"]
 [ext_resource type="Script" uid="uid://ti5t850fs1jt" path="res://Level/Identifier.cs" id="4_idptv"]
+[ext_resource type="PackedScene" uid="uid://cvcrpv22gl4mh" path="res://Level/Common/Interactables/Torch.tscn" id="7_42nrg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_idptv"]
 size = Vector3(2.0371552, 0.088378906, 0.20358276)
@@ -246,6 +247,19 @@ material_override = SubResource("StandardMaterial3D_e1bfu")
 gi_lightmap_texel_scale = 2.7754
 mesh = SubResource("PlaneMesh_08uu4")
 
+[node name="StaticBody3D" type="StaticBody3D" parent="StaticBody3D" unique_id=1842234264]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4786806, 0)
+physics_material_override = SubResource("PhysicsMaterial_782l8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D/StaticBody3D" unique_id=629746181]
+shape = SubResource("BoxShape3D_014kx")
+
+[node name="Terrain - not used for now" type="MeshInstance3D" parent="StaticBody3D/StaticBody3D" unique_id=1095182526]
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_e1bfu")
+gi_lightmap_texel_scale = 2.7754
+mesh = SubResource("PlaneMesh_08uu4")
+
 [node name="Debug Name" type="Label3D" parent="." unique_id=2031349554]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.004991293, 0)
 pixel_size = 0.025
@@ -292,3 +306,6 @@ skeleton = NodePath("../..")
 [node name="Label3D" type="Label3D" parent="Node3D/MeshInstance3D" unique_id=1159076240]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0058836043, 0)
 text = "EAST"
+
+[node name="Torch" parent="." unique_id=1212082959 instance=ExtResource("7_42nrg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42357695, -0.0036466122, -0.7377856)
