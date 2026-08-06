@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DungeonDelve.Level.Common.Item;
 using Godot;
 
-namespace DungeonDelve.Level.TopLayer;
+namespace DungeonDelve.Level.Handler;
 
 public partial class InventoryHandler : Node
 {

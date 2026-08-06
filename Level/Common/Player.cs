@@ -1,9 +1,6 @@
 using Godot;
-using System;
-using System.Collections.Generic;
 using DungeonDelve.Level.Common;
-using DungeonDelve.Level.Common.Item;
-using DungeonDelve.Level.TopLayer;
+using InventoryHandler = DungeonDelve.Level.Handler.InventoryHandler;
 
 public partial class Player : CharacterBody3D
 {

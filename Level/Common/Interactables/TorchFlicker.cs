@@ -10,8 +10,8 @@ public partial class TorchFlicker : Node3D
     [Export] public float FlickerAmount = 1.2f;
     [Export] public float FlickerSpeed = 15.0f;
 
-    [Export] public Color BaseColor = new Color(1.0f, 0.55f, 0.15f);
-    [Export] public Color FlickerColor = new Color(1.0f, 0.35f, 0.05f);
+    [Export] public Color BaseColor = new(1.0f, 0.55f, 0.15f);
+    [Export] public Color FlickerColor = new(1.0f, 0.35f, 0.05f);
 
     private Light3D _light;
     private FastNoiseLite _noise;

@@ -4,7 +4,7 @@ using System;
 public partial class GameManager : Node
 {
     [Export] private Player _player;
-    [Export] private LevelBuilder _levelBuilder;
+    [Export] private DungeonDelve.Level.Handler.LevelHandler _levelHandler;
     
 
     [ExportGroup("Pause")] 
@@ -13,8 +13,8 @@ public partial class GameManager : Node
 
     public override void _Ready()
     {
-        _levelBuilder.Level = 10;
-        _levelBuilder.Initial();   
+        _levelHandler.Level = 10;
+        _levelHandler.Initial();   
     }
 
     public override void _Process(double delta)
