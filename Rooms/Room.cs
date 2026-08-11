@@ -53,7 +53,6 @@ public partial class Room : Node3D
             .FirstOrDefault()
             ?.GetShape() as BoxShape3D;
 
-        GD.Print(shape?.Size + " Room: " + Name);
         return shape?.Size.X ?? 0f;
     }
 }

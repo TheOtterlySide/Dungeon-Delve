@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DungeonDelve.Level.Common;
 using DungeonDelve.Rooms.SPECIAL;
@@ -78,7 +79,7 @@ public partial class LevelHandler : Node
 
         if (spawnAreaRight == null)
         {
-            GD.PrintErr("Spawn area not found or is not a Node3D.");
+            DebugManager.Instance.LogError("Spawn area not found or is not a Node3D.");
             return;
         }
 
@@ -100,7 +101,7 @@ public partial class LevelHandler : Node
     {
         foreach (var room in _allRooms)
         {
-            GD.Print($"=== Room: {room.Name} | Connected: {string.Join(", ", room.ConnectedDirections)} ===");
+            DebugManager.Instance.Log($"=== Room: {room.Name} | Connected: {string.Join(", ", room.ConnectedDirections)} ===");
 
             var doorNode = room.GetNode("Doors");
             var wallNode = room.GetNode("Walls");
@@ -113,7 +114,7 @@ public partial class LevelHandler : Node
                 var child = target.GetChildren()
                     .FirstOrDefault(x => x.Name.ToString() == dir.ToString()) as Node3D;
 
-                GD.Print($"Dir: {dir} | Connected: {connected} | Child: {child?.Name} | Target: {target.Name}");
+                DebugManager.Instance.Log($"Dir: {dir} | Connected: {connected} | Child: {child?.Name} | Target: {target.Name}");
 
                 if (child == null)
                 {
@@ -200,10 +201,12 @@ public partial class LevelHandler : Node
         var count = 0;
 
         PlaceInGrid(current, cursor);
-        GD.Print($"StartRoom sockets total: {_startRoomInstance.RoomSockets.Count}");
-        GD.Print($"StartRoom available sockets: {_startRoomInstance.GetAvailableSockets().Count}");
+        DebugManager.Instance.Log($"=== StartRoom: {current.Name} | Sockets: {current.RoomSockets.Count} ===");
+        DebugManager.Instance.Log($"StartRoom sockets total: {_startRoomInstance.RoomSockets.Count}");
+        DebugManager.Instance.Log($"StartRoom available sockets: {_startRoomInstance.GetAvailableSockets().Count}");
+        
         foreach (var s in _startRoomInstance.RoomSockets)
-            GD.Print($"  Socket: {s.SocketDirection} | IsUsed: {s.IsUsed}");
+            DebugManager.Instance.Log($"  Socket: {s.SocketDirection} | IsUsed: {s.IsUsed}");
         _allRooms.Add(_startRoomInstance);
         _allRooms.AddRange(_roomPool);
 
@@ -211,10 +214,11 @@ public partial class LevelHandler : Node
 
         while (_roomPool.Count > 0)
         {
-            GD.Print($"current: {current.Name} | available: {current.GetAvailableSockets().Count} | lastDir: {lastDir}");
             var freeSocket = current.GetAvailableRandomSocket(lastDir);
-            GD.Print($"freeSocket: {freeSocket?.SocketDirection.ToString() ?? "NULL"}");
-        
+            
+            DebugManager.Instance.Log($"current: {current.Name} | available: {current.GetAvailableSockets().Count} | lastDir: {lastDir}");
+            DebugManager.Instance.Log($"freeSocket: {freeSocket?.SocketDirection.ToString() ?? "NULL"}");
+            
             if (freeSocket == null)
             {
                 var fallback = placedRooms
@@ -224,7 +228,7 @@ public partial class LevelHandler : Node
 
                 if (fallback == null)
                 {
-                    GD.PrintErr("LevelBuilder: No sockets left anywhere – aborting.");
+                    DebugManager.Instance.LogError("LevelBuilder: No sockets left anywhere – aborting.");
                     break;
                 }
 
@@ -285,7 +289,7 @@ public partial class LevelHandler : Node
         var anchor = PickRoomForExit();
         if (anchor == null)
         {
-            GD.PrintErr("LevelBuilder: No room available to attach the exit.");
+            DebugManager.Instance.LogError("[Error]: PickRoomForExit() returned null.");
             return;
         }
 
@@ -311,7 +315,7 @@ public partial class LevelHandler : Node
             return;
         }
 
-        GD.PrintErr("LevelBuilder: Could not find a free slot for the exit room.");
+        DebugManager.Instance.LogError("LevelBuilder: Could not find a free slot for the exit room.");
     }
 
     // -------------------------------------------------------------------------
@@ -410,14 +414,14 @@ public partial class LevelHandler : Node
 
     private void LogUnplacedRooms()
     {
-        GD.Print("LevelBuilder: Rooms remaining in pool: ", _roomPool.Count);
+        DebugManager.Instance.LogError("LevelBuilder: Rooms remaining in pool: " + _roomPool.Count);
         foreach (var r in _roomPool)
-            GD.PrintErr("LevelBuilder: Room never placed – ", r.Name);
+            DebugManager.Instance.LogError("LevelBuilder: Room never placed – " + r.Name);
     }
 
     private void PrintGridDebug()
     {
         foreach (var entry in _grid)
-            GD.Print(entry.Key, " : ", entry.Value.Name);
+            DebugManager.Instance.Log($"LevelBuilder: {entry.Key} - {entry.Value}");
     }
 }

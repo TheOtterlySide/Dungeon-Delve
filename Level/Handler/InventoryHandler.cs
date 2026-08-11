@@ -28,16 +28,15 @@ public partial class InventoryHandler : Node
 
     public void AddItem(Item item)
     {
-        GD.Print("Picked up");  
         Inventory.Add(item);
         _hud.GetChild<Label>(0).Text = $"Inventory: {Inventory.Count}";
-        GD.Print($"Added {item}");
-        GD.Print($"Added {Inventory.Count}");
+        DebugManager.Instance.Log($"Adding {item}");
+        DebugManager.Instance.Log($"Added {Inventory.Count}");
     }
 
     public void RemoveItem(Item item)
     {
-        GD.Print($"Removed {item}");
+        DebugManager.Instance.Log($"Removing {item}");
         Inventory.Remove(item);
     }
 }

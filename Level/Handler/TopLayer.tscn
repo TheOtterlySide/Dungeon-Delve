@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://n6f26gc7p7le"]
 
-[ext_resource type="Script" uid="uid://dhkoxo1f31e2u" path="res://Level/TopLayer/GameManager.cs" id="1_hun5q"]
+[ext_resource type="Script" uid="uid://dhkoxo1f31e2u" path="res://Level/Manager/GameManager.cs" id="1_hun5q"]
 [ext_resource type="Texture2D" uid="uid://cxbumo8b7ue58" path="res://Texture : Model/Grass.jpg" id="1_r0ksi"]
-[ext_resource type="Script" uid="uid://ciaqikprrn335" path="res://Level/TopLayer/LevelBuilder.cs" id="2_8q7dr"]
+[ext_resource type="Script" uid="uid://ciaqikprrn335" path="res://Level/Handler/LevelHandler.cs" id="2_8q7dr"]
 [ext_resource type="Script" uid="uid://dy6inbrockvv6" path="res://Level/Common/Player.cs" id="2_87g2j"]
 [ext_resource type="PackedScene" uid="uid://bax6r5bdmslfh" path="res://Rooms/StartRoom.tscn" id="3_h4a57"]
 [ext_resource type="PackedScene" uid="uid://bgpl716ogfcp" path="res://Rooms/EndRoom.tscn" id="4_v2rt0"]
 [ext_resource type="PackedScene" uid="uid://csewb7d12vbwl" path="res://Scenes/TreasureChest.tscn" id="5_h4a57"]
-[ext_resource type="Script" uid="uid://co1he3ygdo8ne" path="res://Level/TopLayer/InventoryHandler.cs" id="6_74erh"]
+[ext_resource type="Script" uid="uid://co1he3ygdo8ne" path="res://Level/Handler/InventoryHandler.cs" id="6_74erh"]
+[ext_resource type="Script" uid="uid://dtrluks7o73aj" path="res://Level/Manager/DebugManager.cs" id="7_5cc45"]
 [ext_resource type="WwiseBank" uid="uid://dklasu43l4e4a" path="res://Wwise/resources/SoundBank/{48AF1FAC-76E9-4919-BF3E-8B88278864BE}.tres" id="8_v2rt0"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l60kp"]
@@ -27,12 +28,13 @@ font_size = 128
 
 [node name="Main" type="Node3D" unique_id=617513794]
 
-[node name="GameManager" type="Node" parent="." unique_id=472932947 node_paths=PackedStringArray("_player", "_levelBuilder")]
+[node name="GameManager" type="Node" parent="." unique_id=472932947 node_paths=PackedStringArray("_player", "_levelHandler", "_debugManager")]
 script = ExtResource("1_hun5q")
 _player = NodePath("../CharacterBody3D")
-_levelBuilder = NodePath("LevelBuilder")
+_levelHandler = NodePath("LevelHandler")
+_debugManager = NodePath("DebugManager")
 
-[node name="LevelBuilder" type="Node" parent="GameManager" unique_id=735112104]
+[node name="LevelHandler" type="Node" parent="GameManager" unique_id=735112104]
 script = ExtResource("2_8q7dr")
 _startRoom = ExtResource("3_h4a57")
 _exitRoom = ExtResource("4_v2rt0")
@@ -44,6 +46,9 @@ _bossRoomPath = "res://Rooms/BOSS/"
 [node name="InventoryHandler" type="Node" parent="GameManager" unique_id=845929411 node_paths=PackedStringArray("_player")]
 script = ExtResource("6_74erh")
 _player = NodePath("../../CharacterBody3D")
+
+[node name="DebugManager" type="Node" parent="GameManager" unique_id=281445678]
+script = ExtResource("7_5cc45")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2113898279]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)

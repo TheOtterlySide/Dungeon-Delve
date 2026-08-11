@@ -77,11 +77,11 @@ public partial class Chest : Interactable
             {
                 if (dir.CurrentIsDir())
                 {
-                    GD.Print($"Found directory: {fileName}");
+                    DebugManager.Instance.Log($"Found directory: {fileName}");
                 }
                 else
                 {
-                    GD.Print($"Found file: {fileName}");
+                    DebugManager.Instance.Log($"Found file: {fileName}");
                     var result = $"{path}/{fileName}";
                     resultList.Add(result);
                 }
@@ -93,7 +93,7 @@ public partial class Chest : Interactable
         
         else
         {
-            GD.Print("An error occurred when trying to access the path.");
+            DebugManager.Instance.LogError($"Could not find directory: {path}");
             return null;
         }
     }
