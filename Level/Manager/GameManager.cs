@@ -5,7 +5,6 @@ public partial class GameManager : Node
 {
     [Export] private Player _player;
     [Export] private DungeonDelve.Level.Handler.LevelHandler _levelHandler;
-    [Export] private DebugManager _debugManager;
     
 
     [ExportGroup("Pause")] 

@@ -46,8 +46,8 @@ public partial class LevelHandler : Node
 
     private List<Room> _roomPool = new();
     private List<Room> _allRooms = new();
-
-    private readonly Dictionary<(int x, int y), Room> _grid = new();
+    private List<Node3D> _chestList = new();
+    private Dictionary<(int x, int y), Room> _grid = new();
 
     private Room _startRoomInstance;
     private Room _exitRoomInstance;
@@ -66,6 +66,12 @@ public partial class LevelHandler : Node
         PlaceWallsAndDoors();
 
         SpawnChests();
+    }
+
+    public void ReloadLevel()
+    {
+        ResetFields();
+        Initial();
     }
 
     // -------------------------------------------------------------------------
@@ -89,6 +95,7 @@ public partial class LevelHandler : Node
         var spawnPosition = new Vector3(randomX, spawnAreaRight.GlobalPosition.Y, randomZ);
         var instant = (Node3D)_chestScene.Instantiate();
 
+        _chestList.Add(instant);
         AddChild(instant);
         instant.GlobalPosition = spawnPosition;
     }
@@ -169,7 +176,7 @@ public partial class LevelHandler : Node
         var room = (Room)scene.Instantiate();
         AddChild(room);
         room.Init();
-        
+
         //TODO: DEBUG, delete laterz
         if (room.Name == "Room01" && firstRun)
         {
@@ -204,7 +211,7 @@ public partial class LevelHandler : Node
         DebugManager.Instance.Log($"=== StartRoom: {current.Name} | Sockets: {current.RoomSockets.Count} ===");
         DebugManager.Instance.Log($"StartRoom sockets total: {_startRoomInstance.RoomSockets.Count}");
         DebugManager.Instance.Log($"StartRoom available sockets: {_startRoomInstance.GetAvailableSockets().Count}");
-        
+
         foreach (var s in _startRoomInstance.RoomSockets)
             DebugManager.Instance.Log($"  Socket: {s.SocketDirection} | IsUsed: {s.IsUsed}");
         _allRooms.Add(_startRoomInstance);
@@ -215,15 +222,15 @@ public partial class LevelHandler : Node
         while (_roomPool.Count > 0)
         {
             var freeSocket = current.GetAvailableRandomSocket(lastDir);
-            
+
             DebugManager.Instance.Log($"current: {current.Name} | available: {current.GetAvailableSockets().Count} | lastDir: {lastDir}");
             DebugManager.Instance.Log($"freeSocket: {freeSocket?.SocketDirection.ToString() ?? "NULL"}");
-            
+
             if (freeSocket == null)
             {
                 var fallback = placedRooms
                     .Where(r => r.GetAvailableSockets().Count > 0)
-                    .OrderBy(_ => _random.Next()) 
+                    .OrderBy(_ => _random.Next())
                     .FirstOrDefault();
 
                 if (fallback == null)
@@ -406,6 +413,26 @@ public partial class LevelHandler : Node
         return candidates.Count > 0
             ? candidates[_random.Next(candidates.Count)]
             : null;
+    }
+
+    // -------------------------------------------------------------------------
+    // Reload
+    // -------------------------------------------------------------------------
+    private void ResetFields()
+    {
+        foreach (var room in _allRooms) room.Free();                                                                                                                                                                            
+        foreach (var chest in _chestList) chest.Free();                                                                                                                                                                         
+        _chestList = new();  
+        
+        firstRun = true;
+        _normalRoomScenes = new();
+        _specialRoomScenes = new();
+        _bossRoomScenes = new();
+
+        _roomPool = new();
+        _allRooms = new();
+        _grid = new();
+
     }
 
     // -------------------------------------------------------------------------
