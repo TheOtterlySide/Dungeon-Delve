@@ -6,7 +6,6 @@ using System.Linq;
 using Godot;
 
 namespace DungeonDelve.Level.Common.Interactables;
-
 public partial class Chest : Interactable
 {
     private bool _isOpened;

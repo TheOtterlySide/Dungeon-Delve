@@ -26,13 +26,17 @@ albedo_texture = ExtResource("1_r0ksi")
 [sub_resource type="LabelSettings" id="LabelSettings_74erh"]
 font_size = 128
 
+[sub_resource type="LabelSettings" id="LabelSettings_drltq"]
+font_size = 123
+
 [node name="Main" type="Node3D" unique_id=617513794]
 
-[node name="GameManager" type="Node" parent="." unique_id=472932947 node_paths=PackedStringArray("_player", "_levelHandler", "_debugManager")]
+[node name="GameManager" type="Node" parent="." unique_id=472932947 node_paths=PackedStringArray("_player", "_levelHandler", "_pauseMenu")]
 script = ExtResource("1_hun5q")
 _player = NodePath("../CharacterBody3D")
 _levelHandler = NodePath("LevelHandler")
-_debugManager = NodePath("DebugManager")
+_debugMode = true
+_pauseMenu = NodePath("../PauseMenue")
 
 [node name="LevelHandler" type="Node" parent="GameManager" unique_id=735112104]
 script = ExtResource("2_8q7dr")
@@ -113,3 +117,52 @@ offset_right = 320.0
 offset_bottom = 170.0
 text = "TEST"
 label_settings = SubResource("LabelSettings_74erh")
+
+[node name="PauseMenue" type="Control" parent="." unique_id=1068395112]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="PauseMenue" unique_id=177787334]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -368.85483
+offset_top = -94.5
+offset_right = 368.85483
+offset_bottom = 94.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="PauseMenue/Button" unique_id=332318224]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -367.42743
+offset_top = -95.25
+offset_right = 367.42743
+offset_bottom = 95.25
+grow_horizontal = 2
+grow_vertical = 2
+text = "RELOAD"
+label_settings = SubResource("LabelSettings_drltq")
+horizontal_alignment = 1
+vertical_alignment = 1

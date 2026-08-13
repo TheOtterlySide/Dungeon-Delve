@@ -1,10 +1,9 @@
 using Godot;
 using System;
-
 public partial class DebugManager : Node
 {
-    public static DebugManager Instance { get; private set; } 
-    [Export] public bool DebugMode = false;
+    public static DebugManager Instance { get; private set; }
+    public bool DebugMode;
 
     public override void _EnterTree()
     {

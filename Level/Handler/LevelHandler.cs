@@ -432,7 +432,6 @@ public partial class LevelHandler : Node
         _roomPool = new();
         _allRooms = new();
         _grid = new();
-
     }
 
     // -------------------------------------------------------------------------
