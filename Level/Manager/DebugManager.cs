@@ -5,11 +5,22 @@ using DungeonDelve.Level.Common.Enum;
 public partial class DebugManager : Node
 {
     public static DebugManager Instance { get; private set; }
+    private RichTextLabel _console;
     public bool DebugMode;
 
     public override void _EnterTree()
     {
         Instance = this;
+    }
+
+    public override void _Ready()
+    {
+        _console = Instance.GetNode<RichTextLabel>("Console");
+    }
+
+    public override void _Process(double delta)
+    {
+        _console.Visible = DebugMode;
     }
 
     public void LogMessage(DebugKind kind, string message, DebugCategory category)
@@ -33,16 +44,19 @@ public partial class DebugManager : Node
     
     private void Log(string message, DebugCategory category)                                                                      
     {
-        GD.Print($"[Debug] {message}");                                                                                                                                                                                     
+        GD.Print($"[Debug] {message}");
+        _console.AppendText($"[Debug] {message}\n");
     }
 
     private void LogError(string message, DebugCategory category)
     {
         GD.PrintErr($"[Error] {message}");
+        _console.AppendText($"[Error] {message}\n");
     }
     
     private void LogWarning(string message, DebugCategory category)
     {
         GD.PrintRich($"[color=yellow] [Warning] {message} [/color]");
+        _console.AppendText($"[Warning] {message}\n");
     }
 }

@@ -2,6 +2,7 @@ using Godot;
 using System.Collections.Generic;
 using System.Linq;
 using DungeonDelve.Level.Common;
+using DungeonDelve.Level.Common.Enum;
 using DungeonDelve.Rooms.SPECIAL;
 
 public partial class Room : Node3D
@@ -11,6 +12,7 @@ public partial class Room : Node3D
 
     public List<RoomSocket>    RoomSockets          { get; private set; }
     public HashSet<Direction>  ConnectedDirections  { get; } = new();
+    private Node3D _debugNode;
 
     private const float ChangeDirProbability = 0.1f;
 
@@ -25,7 +27,13 @@ public partial class Room : Node3D
 
     public override void _Ready()
     {
+        _debugNode = GetNode<Node3D>("Debug");
         Init();
+    }
+
+    public override void _Process(double delta)
+    {
+        _debugNode.Visible = DebugManager.Instance.DebugMode;
     }
 
     public RoomSocket GetAvailableRandomSocket(Direction lastDirection)

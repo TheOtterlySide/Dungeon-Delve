@@ -2,19 +2,20 @@ using Godot;
 using System;
 
 namespace DungeonDelve.Level.Manager;
+
 public partial class GameManager : Node
 {
     [Export] private Player _player;
     [Export] private DungeonDelve.Level.Handler.LevelHandler _levelHandler;
-    
+
     [ExportGroup("Debug")]
     [Export] bool _debugMode;
-    
-    [ExportGroup("Pause")] 
+
+    [ExportGroup("Pause")]
     private bool _pausePressed;
+
     [Export] private Control _pauseMenu;
     private Button _reloadButton;
-
 
 
     public override void _Ready()
@@ -23,12 +24,18 @@ public partial class GameManager : Node
         _reloadButton = _pauseMenu.GetNode<Button>("Button");
         _levelHandler.Level = 10;
         _levelHandler.Initial();
+        _reloadButton.Pressed += ReloadButtonPressed;
     }
 
-  
 
     public override void _Process(double delta)
     {
+        if (Input.IsActionJustPressed("debug"))
+        {
+            _debugMode = !_debugMode;
+            DebugManager.Instance.DebugMode = _debugMode;
+        }
+
         if (Input.IsActionJustPressed("pause"))
         {
             if (!_pausePressed)
@@ -38,7 +45,6 @@ public partial class GameManager : Node
                 if (_debugMode)
                 {
                     _reloadButton.Visible = true;
-                    _reloadButton.Pressed += ReloadButtonPressed;
                 }
                 else
                 {
@@ -52,7 +58,6 @@ public partial class GameManager : Node
                 if (_debugMode)
                 {
                     _reloadButton.Visible = true;
-                    _reloadButton.Pressed -= ReloadButtonPressed;
                 }
                 else
                 {
@@ -60,7 +65,7 @@ public partial class GameManager : Node
                 }
             }
         }
-        
+
         base._Process(delta);
     }
 
@@ -68,5 +73,10 @@ public partial class GameManager : Node
     private void ReloadButtonPressed()
     {
         _levelHandler.ReloadLevel();
+    }
+
+    public override void _ExitTree()
+    {
+        _reloadButton.Pressed -= ReloadButtonPressed;
     }
 }

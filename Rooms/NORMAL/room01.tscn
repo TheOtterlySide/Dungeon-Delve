@@ -243,12 +243,12 @@ mesh = ExtResource("5_j0eab")
 transform = Transform3D(1.22, 0, 0, 0, 1.22, 0, 0, 0, 1.22, -0.013299342, 1.1613611, -0.04949689)
 shape = SubResource("BoxShape3D_nws5t")
 
-[node name="Debug Name" type="Label3D" parent="." unique_id=36839031]
+[node name="Debug" type="Node3D" parent="." unique_id=1441667903]
+
+[node name="Debug Name" type="Label3D" parent="Debug" unique_id=36839031]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.004991293, 0)
 pixel_size = 0.025
 text = "test"
-
-[node name="Debug" type="Node3D" parent="." unique_id=1441667903]
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Debug" unique_id=1581584069]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)

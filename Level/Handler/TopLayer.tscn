@@ -11,6 +11,10 @@
 [ext_resource type="Script" uid="uid://dtrluks7o73aj" path="res://Level/Manager/DebugManager.cs" id="7_5cc45"]
 [ext_resource type="WwiseBank" uid="uid://dklasu43l4e4a" path="res://Wwise/resources/SoundBank/{48AF1FAC-76E9-4919-BF3E-8B88278864BE}.tres" id="8_v2rt0"]
 
+[sub_resource type="Theme" id="Theme_d8v7x"]
+default_base_scale = 0.08
+default_font_size = 20
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l60kp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l60kp"]
@@ -53,6 +57,18 @@ _player = NodePath("../../CharacterBody3D")
 
 [node name="DebugManager" type="Node" parent="GameManager" unique_id=281445678]
 script = ExtResource("7_5cc45")
+
+[node name="Console" type="RichTextLabel" parent="GameManager/DebugManager" unique_id=1725332503]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -562.0
+offset_bottom = 605.0
+grow_horizontal = 0
+theme = SubResource("Theme_d8v7x")
+bbcode_enabled = true
+scroll_following = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2113898279]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
