@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DungeonDelve.Level.Common.Enum;
 using DungeonDelve.Level.Common.Item;
 using Godot;
 
@@ -30,13 +31,13 @@ public partial class InventoryHandler : Node
     {
         Inventory.Add(item);
         _hud.GetChild<Label>(0).Text = $"Inventory: {Inventory.Count}";
-        DebugManager.Instance.Log($"Adding {item}");
-        DebugManager.Instance.Log($"Added {Inventory.Count}");
+        DebugManager.Instance.LogMessage(DebugKind.LOG, $"Adding {item}", DebugCategory.Inventory);
+        DebugManager.Instance.LogMessage(DebugKind.LOG, $"Added {Inventory.Count}", DebugCategory.Inventory);
     }
 
     public void RemoveItem(Item item)
     {
-        DebugManager.Instance.Log($"Removing {item}");
+        DebugManager.Instance.LogMessage(DebugKind.LOG, $"Removing {item}", DebugCategory.Inventory);
         Inventory.Remove(item);
     }
 }

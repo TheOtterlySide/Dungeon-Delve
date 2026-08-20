@@ -76,11 +76,11 @@ public partial class Chest : Interactable
             {
                 if (dir.CurrentIsDir())
                 {
-                    DebugManager.Instance.Log($"Found directory: {fileName}");
+                    DebugManager.Instance.LogMessage( DebugKind.LOG ,$"Found directory: {fileName}", DebugCategory.Interactable);
                 }
                 else
                 {
-                    DebugManager.Instance.Log($"Found file: {fileName}");
+                    DebugManager.Instance.LogMessage( DebugKind.LOG, $"Found file: {fileName}", DebugCategory.Interactable);
                     var result = $"{path}/{fileName}";
                     resultList.Add(result);
                 }
@@ -92,7 +92,7 @@ public partial class Chest : Interactable
         
         else
         {
-            DebugManager.Instance.LogError($"Could not find directory: {path}");
+            DebugManager.Instance.LogMessage(DebugKind.ERROR, $"Could not find directory: {path}", DebugCategory.Interactable);
             return null;
         }
     }
