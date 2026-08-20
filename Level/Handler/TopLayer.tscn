@@ -15,6 +15,9 @@
 default_base_scale = 0.08
 default_font_size = 20
 
+[sub_resource type="Theme" id="Theme_l7mev"]
+default_font_size = 20
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l60kp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l60kp"]
@@ -59,16 +62,28 @@ _player = NodePath("../../CharacterBody3D")
 script = ExtResource("7_5cc45")
 
 [node name="Console" type="RichTextLabel" parent="GameManager/DebugManager" unique_id=1725332503]
-visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -562.0
-offset_bottom = 605.0
+offset_left = -559.0
+offset_top = 75.0
+offset_right = 3.0
+offset_bottom = 680.0
 grow_horizontal = 0
 theme = SubResource("Theme_d8v7x")
 bbcode_enabled = true
 scroll_following = true
+
+[node name="TabBar" type="TabBar" parent="GameManager/DebugManager" unique_id=439293980]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -166.0
+offset_right = -126.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme = SubResource("Theme_l7mev")
+clip_tabs = false
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2113898279]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
